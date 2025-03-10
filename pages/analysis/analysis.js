@@ -27,6 +27,10 @@ function getMockData() {
       sleep: { value: '7.5', unit: '小时', trend: 2.1 },
       heart: { value: '72', unit: 'bpm', trend: -1.2 },
       pressure: { value: '85', unit: '', trend: -5.3 }
+    },
+    sleepData: {
+      // Assuming sleepData is not provided in the original function
+      // This should be populated with actual sleep data
     }
   };
 }
@@ -101,25 +105,25 @@ Page({
     overviewData: [
       {
         type: 'exercise',
-        icon: '/assets/icons/exercise.png',
+        icon: '/assets/icons/analysis/exercise-time.svg',
         value: '0',
         label: '本周运动(分钟)'
       },
       {
         type: 'meditation',
-        icon: '/assets/icons/meditation.png',
+        icon: '/assets/icons/analysis/sleep.svg',
         value: '0',
         label: '本周冥想(分钟)'
       },
       {
         type: 'steps',
-        icon: '/assets/icons/search.png',
+        icon: '/assets/icons/analysis/step-count.svg',
         value: '0',
         label: '今日步数'
       },
       {
         type: 'calories',
-        icon: '/assets/icons/calories.png',
+        icon: '/assets/icons/analysis/calories.svg',
         value: '0',
         label: '消耗(千卡)'
       }
@@ -134,7 +138,7 @@ Page({
     healthMetrics: [
       {
         type: 'weight',
-        icon: '/assets/icons/weight.png',
+        icon: '/assets/icons/analysis/weight.svg',
         label: '体重',
         value: '0',
         unit: 'kg',
@@ -142,7 +146,7 @@ Page({
       },
       {
         type: 'sleep',
-        icon: '/assets/icons/sleep.png',
+        icon: '/assets/icons/analysis/sleep.svg',
         label: '睡眠',
         value: '0',
         unit: '小时',
@@ -150,7 +154,7 @@ Page({
       },
       {
         type: 'heart',
-        icon: '/assets/icons/heart.png',
+        icon: '/assets/icons/analysis/heart-rate.svg',
         label: '心率',
         value: '0',
         unit: 'bpm',
@@ -158,7 +162,7 @@ Page({
       },
       {
         type: 'pressure',
-        icon: '/assets/icons/pressure.png',
+        icon: '/assets/icons/analysis/blood-pressure.svg',
         label: '压力指数',
         value: '0',
         unit: '',
@@ -202,6 +206,9 @@ Page({
     // 更新冥想统计
     const meditationStats = mockData.meditationStats;
 
+    // 更新睡眠数据
+    const sleepData = mockData.sleepData;
+
     // 更新健康指标
     const healthMetrics = this.data.healthMetrics.map(item => {
       const metricData = mockData.healthMetrics[item.type] || {};
@@ -215,7 +222,8 @@ Page({
     this.setData({
       overviewData,
       meditationStats,
-      healthMetrics
+      healthMetrics,
+      sleepData
     });
   },
 
