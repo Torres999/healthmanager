@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "数据分析",
+  "navigationBarTextStyle": "white",
   "usingComponents": {
     "ec-canvas": "../../components/ec-canvas/ec-canvas"
   },

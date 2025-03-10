@@ -1,7 +1,5 @@
 {
   "navigationBarTitleText": "健康管理",
-  "usingComponents": {
-    "ec-canvas": "../../components/ec-canvas/ec-canvas"
-  },
+  "usingComponents": {},
   "backgroundColor": "#0B1121"
 }

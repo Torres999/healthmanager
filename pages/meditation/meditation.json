@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "冥想空间",
+  "navigationBarTextStyle": "white",
   "usingComponents": {},
   "backgroundColor": "#0B1121"
 } 

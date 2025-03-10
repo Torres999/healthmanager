@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "运动中心",
+  "navigationBarTextStyle": "white",
   "usingComponents": {},
   "enablePullDownRefresh": true,
   "backgroundColor": "#0B1121"

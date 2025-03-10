@@ -7,6 +7,7 @@ page {
 .scrollarea {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* 提高iOS滚动性能 */
 }
 
 .userinfo {
@@ -63,6 +64,8 @@ page {
 
 .header {
   margin-bottom: 10rpx;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .title {
@@ -143,7 +146,18 @@ page {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10rpx;
+  margin-bottom: 0;
+}
+
+.card-header .text-md {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+.card-header .text-secondary {
+  font-size: 26rpx;
+  color: #94A3B8;
 }
 
 .card-tabs {
@@ -163,9 +177,129 @@ page {
 }
 
 .chart-container {
-  height: 380rpx;
   width: 100%;
+  height: 500rpx;
+  margin-top: 10rpx;
   position: relative;
+  overflow: hidden;
+}
+
+/* 图表网格 */
+.chart-grid {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 20px 40px 30px 40px;
+  box-sizing: border-box;
+}
+
+/* 水平网格线 */
+.grid-line {
+  position: absolute;
+  width: calc(100% - 80px);
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  left: 40px;
+}
+
+.grid-line:nth-child(1) {
+  top: 20%;
+}
+.grid-line:nth-child(2) {
+  top: 40%;
+}
+.grid-line:nth-child(3) {
+  top: 60%;
+}
+.grid-line:nth-child(4) {
+  top: 80%;
+}
+.grid-line:nth-child(5) {
+  top: 100%;
+}
+
+/* Y轴标签 */
+.chart-y-labels {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.y-label {
+  font-size: 10px;
+  color: #646C7B;
+  text-align: right;
+  padding-right: 8px;
+}
+
+/* X轴标签 */
+.chart-x-labels {
+  position: absolute;
+  bottom: 0;
+  left: 40px;
+  width: calc(100% - 80px);
+  display: flex;
+  justify-content: space-between;
+}
+
+.x-label {
+  font-size: 10px;
+  color: #646C7B;
+  text-align: center;
+  transform: translateY(20px);
+}
+
+/* 折线容器 */
+.chart-line-container {
+  position: absolute;
+  top: 20px;
+  left: 40px;
+  width: calc(100% - 80px);
+  height: calc(100% - 50px);
+}
+
+/* 数据点 */
+.chart-point {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #8481ED;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* 折线 - 使用背景渐变实现 */
+.chart-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.activity-chart {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.chart-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: block;
 }
 
 .health-chart {
@@ -285,7 +419,10 @@ page {
 
 /* 图表卡片样式 */
 .chart-card {
-  margin-top: 20rpx;
+  padding: 30rpx 30rpx 20rpx;
+  background-color: #151B2E;
+  border-radius: 20rpx;
+  margin: 20rpx 0;
 }
 
 /* 建议卡片样式 */
@@ -322,24 +459,59 @@ page {
 .activity-summary {
   display: flex;
   justify-content: space-between;
-  padding: 15rpx 0;
+  padding: 20rpx 0 10rpx;
+  margin-top: 10rpx;
+  width: 100%;
   border-top: 1rpx solid rgba(255, 255, 255, 0.1);
-  margin-top: 15rpx;
 }
 
 .activity-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
 }
 
 .activity-day {
-  font-size: 24rpx;
-  color: var(--text-secondary);
+  font-size: 28rpx;
+  color: #94A3B8;
   margin-bottom: 8rpx;
 }
 
+.activity-value-container {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 2rpx;
+}
+
 .activity-value {
-  font-size: 24rpx;
-  color: var(--text-primary);
+  font-size: 36rpx;
+  color: #FFFFFF;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.activity-unit {
+  font-size: 28rpx;
+  color: #94A3B8;
+  font-weight: normal;
+  margin-left: 0;
+  line-height: 1;
+}
+
+.activity-unit-second {
+  font-size: 28rpx;
+  color: #94A3B8;
+  font-weight: normal;
+  line-height: 1;
+  margin-top: 0;
+}
+
+/* 折线连接器，用于连接数据点 */
+.chart-connector {
+  position: absolute;
+  height: 2px;
+  background-color: #8481ED;
+  transform-origin: left center;
+  z-index: 1;
 }

@@ -1,15 +1,15 @@
 <!--index.wxml-->
 <page-header title="健康管理" bind:heightChange="onHeaderHeightChange"></page-header>
 
-<!-- 顶部欢迎区域 - 直接放在page-header后面，不在scroll-view内 -->
-<view class="header" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100;">
+<!-- 顶部欢迎区域 - 直接放在page-header后面，不在scroll-view内，优化版 -->
+<view class="header" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100; transform: translateY({{scrollOffset}}px) translateZ(0); will-change: transform; overflow: visible; min-height: 60rpx;">
   <view class="title" style="margin-bottom: 0;">
     <text class="text-lg font-bold">早安，{{userInfo.nickName || 'David'}}</text>
     <text class="text-sm text-secondary mt-20">开启充满活力的一天</text>
   </view>
 </view>
 
-<scroll-view class="scrollarea" scroll-y type="list">
+<scroll-view class="scrollarea" scroll-y type="list" bindscroll="onScrollView" enhanced="true" show-scrollbar="false">
   <view class="container" style="padding-top: {{headerHeight - 60}}px;">
     <!-- 占位元素，为固定定位的header留出空间 -->
     <view style="height: 40rpx;"></view>
@@ -79,38 +79,9 @@
         <text class="text-md font-bold">本周活动</text>
         <text class="text-sm text-secondary">查看详情</text>
       </view>
+      <!-- 使用官方Canvas API实现图表 -->
       <view class="chart-container">
-        <ec-canvas id="activity-chart" canvas-id="activity-chart" ec="{{ ec }}"></ec-canvas>
-      </view>
-      <view class="activity-summary">
-        <view class="activity-item">
-          <text class="activity-day">周一</text>
-          <text class="activity-value">30分钟</text>
-        </view>
-        <view class="activity-item">
-          <text class="activity-day">周二</text>
-          <text class="activity-value">40分钟</text>
-        </view>
-        <view class="activity-item">
-          <text class="activity-day">周三</text>
-          <text class="activity-value">35分钟</text>
-        </view>
-        <view class="activity-item">
-          <text class="activity-day">周四</text>
-          <text class="activity-value">50分钟</text>
-        </view>
-        <view class="activity-item">
-          <text class="activity-day">周五</text>
-          <text class="activity-value">45分钟</text>
-        </view>
-        <view class="activity-item">
-          <text class="activity-day">周六</text>
-          <text class="activity-value">60分钟</text>
-        </view>
-        <view class="activity-item">
-          <text class="activity-day">周日</text>
-          <text class="activity-value">70分钟</text>
-        </view>
+        <canvas canvas-id="activityChart" class="activity-chart" bindtouchstart="touchChart" bindtouchmove="touchMoveChart" bindtouchend="touchEndChart"></canvas>
       </view>
     </view>
 
