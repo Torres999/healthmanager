@@ -169,10 +169,15 @@ Page({
       onInit: initChart
     },
     contentTop: 0,
-    headerHeight: 0
+    headerHeight: 0,
+    scrollOffset: 0
   },
 
   onLoad() {
+    this.lastOffset = 0;
+    this.lastPageOffset = 0;
+    this.scrollThrottleTimer = null;
+    this.pageScrollThrottleTimer = null;
     this.loadMockData();
   },
 
@@ -239,5 +244,74 @@ Page({
       headerHeight: e.detail.height,
       contentTop: e.detail.contentTop
     });
+  },
+
+  // 处理scroll-view的滚动事件
+  onScrollView(e) {
+    // 使用节流控制调用频率
+    if (this.scrollThrottleTimer) {
+      return;
+    }
+    
+    this.scrollThrottleTimer = setTimeout(() => {
+      this.scrollThrottleTimer = null;
+    }, 5); // 5ms节流
+    
+    // 获取滚动距离
+    const scrollTop = e.detail.scrollTop;
+    
+    // 计算合适的偏移量，并添加边界限制
+    let offset = -scrollTop;
+    
+    // 限制最大偏移量，防止标题滑出顶部视图
+    const maxOffset = 0; // 不允许向上位移超过初始位置
+    
+    // 限制最小偏移量，防止标题完全消失
+    const minOffset = -this.data.headerHeight;
+    
+    // 应用边界限制
+    offset = Math.min(maxOffset, Math.max(minOffset, offset));
+    
+    // 只有当偏移量变化超过阈值时才更新
+    if (!this.lastOffset || Math.abs(offset - this.lastOffset) > 0.5) {
+      this.lastOffset = offset;
+      
+      // 使用nextTick优化性能
+      wx.nextTick(() => {
+        this.setData({
+          scrollOffset: offset
+        });
+      });
+    }
+  },
+
+  // 处理整页滚动事件
+  onPageScroll(e) {
+    // 使用节流控制调用频率
+    if (this.pageScrollThrottleTimer) {
+      return;
+    }
+    
+    this.pageScrollThrottleTimer = setTimeout(() => {
+      this.pageScrollThrottleTimer = null;
+    }, 5);
+    
+    // 获取滚动距离
+    const scrollTop = e.scrollTop;
+    
+    // 计算合适的偏移量，并添加边界限制
+    let offset = -scrollTop;
+    const maxOffset = 0;
+    const minOffset = -this.data.headerHeight;
+    offset = Math.min(maxOffset, Math.max(minOffset, offset));
+    
+    // 只有当偏移量变化超过阈值时才更新
+    if (!this.lastPageOffset || Math.abs(offset - this.lastPageOffset) > 0.5) {
+      this.lastPageOffset = offset;
+      
+      this.setData({
+        scrollOffset: offset
+      });
+    }
   }
 }); 

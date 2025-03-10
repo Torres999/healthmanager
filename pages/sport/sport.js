@@ -5,11 +5,9 @@ import * as request from '../../utils/request';
 Page({
   data: {
     exerciseData: {
-      minutes: 0,
-      calories: 0,
-      count: 0,
-      progress: 0,
-      goal: 30
+      minutes: 75,
+      calories: 320,
+      count: 3
     },
     sportTypes: [
       {
@@ -39,12 +37,66 @@ Page({
     ],
     records: [],
     contentTop: 0,
-    headerHeight: 0
+    headerHeight: 0,
+    popularWorkouts: [
+      {
+        id: 1,
+        title: '晨间拉伸',
+        duration: '10分钟',
+        level: '初级',
+        calories: 50,
+        image: '/images/workout-1.jpg'
+      },
+      {
+        id: 2,
+        title: '全身HIIT训练',
+        duration: '20分钟',
+        level: '中级',
+        calories: 180,
+        image: '/images/workout-2.jpg'
+      },
+      {
+        id: 3,
+        title: '柔韧性训练',
+        duration: '15分钟',
+        level: '初级',
+        calories: 90,
+        image: '/images/workout-3.jpg'
+      }
+    ],
+    workoutHistory: [
+      {
+        id: 1,
+        title: '有氧运动',
+        date: '今天',
+        duration: 30,
+        calories: 150
+      },
+      {
+        id: 2,
+        title: '力量训练',
+        date: '昨天',
+        duration: 25,
+        calories: 120
+      },
+      {
+        id: 3,
+        title: '柔韧性训练',
+        date: '3天前',
+        duration: 20,
+        calories: 80
+      }
+    ],
+    scrollOffset: 0
   },
 
   onLoad() {
     this.loadExerciseData();
     this.loadExerciseRecords();
+    this.lastOffset = 0;
+    this.lastPageOffset = 0;
+    this.scrollThrottleTimer = null;
+    this.pageScrollThrottleTimer = null;
   },
 
   onShow() {
@@ -119,5 +171,74 @@ Page({
       headerHeight: e.detail.height,
       contentTop: e.detail.contentTop
     });
+  },
+
+  // 处理scroll-view的滚动事件
+  onScrollView(e) {
+    // 使用节流控制调用频率
+    if (this.scrollThrottleTimer) {
+      return;
+    }
+    
+    this.scrollThrottleTimer = setTimeout(() => {
+      this.scrollThrottleTimer = null;
+    }, 5); // 5ms节流
+    
+    // 获取滚动距离
+    const scrollTop = e.detail.scrollTop;
+    
+    // 计算合适的偏移量，并添加边界限制
+    let offset = -scrollTop;
+    
+    // 限制最大偏移量，防止标题滑出顶部视图
+    const maxOffset = 0; // 不允许向上位移超过初始位置
+    
+    // 限制最小偏移量，防止标题完全消失
+    const minOffset = -this.data.headerHeight;
+    
+    // 应用边界限制
+    offset = Math.min(maxOffset, Math.max(minOffset, offset));
+    
+    // 只有当偏移量变化超过阈值时才更新
+    if (!this.lastOffset || Math.abs(offset - this.lastOffset) > 0.5) {
+      this.lastOffset = offset;
+      
+      // 使用nextTick优化性能
+      wx.nextTick(() => {
+        this.setData({
+          scrollOffset: offset
+        });
+      });
+    }
+  },
+
+  // 处理整页滚动事件
+  onPageScroll(e) {
+    // 使用节流控制调用频率
+    if (this.pageScrollThrottleTimer) {
+      return;
+    }
+    
+    this.pageScrollThrottleTimer = setTimeout(() => {
+      this.pageScrollThrottleTimer = null;
+    }, 5);
+    
+    // 获取滚动距离
+    const scrollTop = e.scrollTop;
+    
+    // 计算合适的偏移量，并添加边界限制
+    let offset = -scrollTop;
+    const maxOffset = 0;
+    const minOffset = -this.data.headerHeight;
+    offset = Math.min(maxOffset, Math.max(minOffset, offset));
+    
+    // 只有当偏移量变化超过阈值时才更新
+    if (!this.lastPageOffset || Math.abs(offset - this.lastPageOffset) > 0.5) {
+      this.lastPageOffset = offset;
+      
+      this.setData({
+        scrollOffset: offset
+      });
+    }
   }
 }); 

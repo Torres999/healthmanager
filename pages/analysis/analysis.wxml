@@ -1,14 +1,14 @@
 <page-header title="数据分析" bind:heightChange="onHeaderHeightChange"></page-header>
 
-<!-- 顶部区域 - 固定定位 -->
-<view class="header" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100;">
+<!-- 顶部区域 - 添加transform实现滚动跟随 -->
+<view class="header" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100; transform: translateY({{scrollOffset}}px) translateZ(0); will-change: transform; overflow: visible; min-height: 60rpx;">
   <view class="title" style="margin-bottom: 0;">
     <text class="text-lg font-bold">数据分析</text>
     <text class="text-sm text-secondary mt-20">健康数据一目了然</text>
   </view>
 </view>
 
-<scroll-view class="scrollarea" scroll-y type="list">
+<scroll-view class="scrollarea" scroll-y type="list" bindscroll="onScrollView">
   <view class="container" style="padding-top: {{headerHeight - 60}}px;">
     <!-- 占位元素，为固定定位的header留出空间 -->
     <view style="height: 20px;"></view>

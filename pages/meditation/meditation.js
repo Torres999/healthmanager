@@ -21,12 +21,13 @@ safeConsole.warn = function() {
 
 Page({
   data: {
+    headerHeight: 0,
+    contentTop: 0,
     featuredCourse: {
-      id: 1,
-      title: '晨间冥想',
+      title: '正念冥想',
+      description: '提高专注力，缓解压力和焦虑',
       duration: 15,
-      description: '开启美好的一天',
-      iconType: 'info'  // 使用内置图标类型
+      level: '初级'
     },
     categories: [
       {
@@ -64,11 +65,16 @@ Page({
       totalMinutes: 0,
       longestStreak: 0
     },
-    headerHeight: 0,
-    contentTop: 0
+    scrollOffset: 0
   },
 
   onLoad() {
+    // 初始化滚动相关变量
+    this.lastOffset = 0;
+    this.lastPageOffset = 0;
+    this.scrollThrottleTimer = null;
+    this.pageScrollThrottleTimer = null;
+
     // 使用安全的日志对象替换全局console
     // 这种方法不会尝试修改console对象本身，而是在需要时使用安全版本
     if (typeof window !== 'undefined') {
@@ -227,5 +233,74 @@ Page({
       headerHeight: e.detail.height,
       contentTop: e.detail.contentTop
     });
+  },
+
+  // 处理scroll-view的滚动事件
+  onScrollView(e) {
+    // 使用节流控制调用频率
+    if (this.scrollThrottleTimer) {
+      return;
+    }
+    
+    this.scrollThrottleTimer = setTimeout(() => {
+      this.scrollThrottleTimer = null;
+    }, 5); // 5ms节流
+    
+    // 获取滚动距离
+    const scrollTop = e.detail.scrollTop;
+    
+    // 计算合适的偏移量，并添加边界限制
+    let offset = -scrollTop;
+    
+    // 限制最大偏移量，防止标题滑出顶部视图
+    const maxOffset = 0; // 不允许向上位移超过初始位置
+    
+    // 限制最小偏移量，防止标题完全消失
+    const minOffset = -this.data.headerHeight;
+    
+    // 应用边界限制
+    offset = Math.min(maxOffset, Math.max(minOffset, offset));
+    
+    // 只有当偏移量变化超过阈值时才更新
+    if (!this.lastOffset || Math.abs(offset - this.lastOffset) > 0.5) {
+      this.lastOffset = offset;
+      
+      // 使用nextTick优化性能
+      wx.nextTick(() => {
+        this.setData({
+          scrollOffset: offset
+        });
+      });
+    }
+  },
+
+  // 处理整页滚动事件
+  onPageScroll(e) {
+    // 使用节流控制调用频率
+    if (this.pageScrollThrottleTimer) {
+      return;
+    }
+    
+    this.pageScrollThrottleTimer = setTimeout(() => {
+      this.pageScrollThrottleTimer = null;
+    }, 5);
+    
+    // 获取滚动距离
+    const scrollTop = e.scrollTop;
+    
+    // 计算合适的偏移量，并添加边界限制
+    let offset = -scrollTop;
+    const maxOffset = 0;
+    const minOffset = -this.data.headerHeight;
+    offset = Math.min(maxOffset, Math.max(minOffset, offset));
+    
+    // 只有当偏移量变化超过阈值时才更新
+    if (!this.lastPageOffset || Math.abs(offset - this.lastPageOffset) > 0.5) {
+      this.lastPageOffset = offset;
+      
+      this.setData({
+        scrollOffset: offset
+      });
+    }
   }
 }); 
