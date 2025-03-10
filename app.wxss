@@ -1,0 +1,178 @@
+/**app.wxss**/
+page {
+  --primary-color: #4F6EF6;
+  --primary-gradient: linear-gradient(135deg, #4F6EF6 0%, #7C5BF6 100%);
+  --background-color: #0B1121;
+  --card-background: #1A2235;
+  --text-primary: #FFFFFF;
+  --text-secondary: #94A3B8;
+  --border-radius-lg: 30rpx;
+  --border-radius-md: 20rpx;
+  --border-radius-sm: 10rpx;
+  --shadow-card: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  --safe-area-inset-top: 44px; /* 状态栏高度 */
+  --capsule-height: 32px; /* 胶囊按钮高度 */
+  --capsule-margin: 7px; /* 胶囊按钮与状态栏的间距 */
+  --header-height: calc(var(--safe-area-inset-top) + var(--capsule-height) + var(--capsule-margin)); /* 顶部区域总高度 */
+  --safe-area-inset-bottom: 34px; /* iPhone X及以上机型的安全区域 */
+  
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
+    sans-serif;
+}
+
+.container {
+  min-height: 100vh;
+  padding: var(--header-height) 30rpx 130rpx; /* 使用header-height替代safe-area-inset-top */
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+}
+
+/* 页面顶部区域，用于与胶囊按钮对齐 */
+.page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  z-index: 100;
+  box-sizing: border-box;
+  padding-top: var(--safe-area-inset-top);
+  background-color: var(--background-color);
+}
+
+/* 页面内容区域，需要在page-header下方 */
+.page-content {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card {
+  background: var(--card-background);
+  border-radius: var(--border-radius-lg);
+  padding: 30rpx;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 20rpx;
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-accent {
+  color: var(--primary-color);
+}
+
+.gradient-bg {
+  background: var(--primary-gradient);
+  color: #FFFFFF;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.mt-20 {
+  margin-top: 20rpx;
+}
+
+.mb-20 {
+  margin-bottom: 20rpx;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.text-lg {
+  font-size: 36rpx;
+  font-weight: 500;
+}
+
+.text-md {
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.text-sm {
+  font-size: 24rpx;
+}
+
+.text-xs {
+  font-size: 20rpx;
+}
+
+.rounded-full {
+  border-radius: 999rpx;
+}
+
+/* 顶部安全区域 */
+.safe-area-top {
+  height: var(--safe-area-inset-top);
+  width: 100%;
+}
+
+/* 胶囊按钮区域 */
+.capsule-area {
+  height: calc(var(--capsule-height) + var(--capsule-margin));
+  width: 100%;
+}
+
+/* 底部安全区域 */
+.safe-area-bottom {
+  height: calc(100rpx + var(--safe-area-inset-bottom)); /* 底部导航栏的高度加上安全区域 */
+  width: 100%;
+}
+
+/* 心跳动画 */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.heartbeat {
+  animation: heartbeat 1.2s infinite ease-in-out;
+}
+
+/* 卡片悬停效果 */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+} 

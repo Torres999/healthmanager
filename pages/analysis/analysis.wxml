@@ -1,0 +1,124 @@
+<page-header title="数据分析" bind:heightChange="onHeaderHeightChange"></page-header>
+
+<!-- 顶部区域 - 固定定位 -->
+<view class="header" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100;">
+  <view class="title" style="margin-bottom: 0;">
+    <text class="text-lg font-bold">数据分析</text>
+    <text class="text-sm text-secondary mt-20">健康数据一目了然</text>
+  </view>
+</view>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container" style="padding-top: {{headerHeight - 60}}px;">
+    <!-- 占位元素，为固定定位的header留出空间 -->
+    <view style="height: 20px;"></view>
+    
+    <!-- 数据概览卡片 -->
+    <view class="overview-grid" style="margin-top: 0;">
+      <view class="overview-card card" wx:for="{{overviewData}}" wx:key="type">
+        <view class="overview-icon gradient-bg">
+          <image src="{{item.icon}}" mode="aspectFit"/>
+        </view>
+        <view class="overview-content">
+          <text class="text-lg font-bold">{{item.value}}</text>
+          <text class="text-sm text-secondary">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 运动趋势图 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="text-md font-bold">运动趋势</text>
+        <picker bindchange="changePeriod" value="{{currentPeriod}}" range="{{periods}}">
+          <text class="text-sm text-accent">{{periods[currentPeriod]}}</text>
+        </picker>
+      </view>
+      <view class="chart-card card">
+        <ec-canvas id="exerciseChart" canvas-id="exerciseChart" ec="{{ ec }}"></ec-canvas>
+      </view>
+    </view>
+
+    <!-- 冥想统计 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="text-md font-bold">冥想统计</text>
+      </view>
+      <view class="meditation-stats card">
+        <view class="stats-row">
+          <view class="stats-item">
+            <text class="text-lg font-bold">{{meditationStats.totalSessions}}</text>
+            <text class="text-sm text-secondary">总次数</text>
+          </view>
+          <view class="stats-item">
+            <text class="text-lg font-bold">{{meditationStats.totalMinutes}}</text>
+            <text class="text-sm text-secondary">总时长(分钟)</text>
+          </view>
+          <view class="stats-item">
+            <text class="text-lg font-bold">{{meditationStats.streak}}</text>
+            <text class="text-sm text-secondary">连续天数</text>
+          </view>
+        </view>
+        <view class="stats-row">
+          <view class="stats-item">
+            <text class="text-lg font-bold">{{meditationStats.avgDuration}}</text>
+            <text class="text-sm text-secondary">平均时长(分钟)</text>
+          </view>
+          <view class="stats-item">
+            <text class="text-lg font-bold">{{meditationStats.mostUsed}}</text>
+            <text class="text-sm text-secondary">最常用类型</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 睡眠分析 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="text-md font-bold">睡眠分析</text>
+      </view>
+      <view class="sleep-card card">
+        <view class="sleep-header">
+          <text class="text-md">本周平均</text>
+          <text class="text-lg font-bold">{{sleepData.avgHours}}小时</text>
+        </view>
+        <view class="sleep-chart">
+          <view class="sleep-bar-container" wx:for="{{sleepData.daily}}" wx:key="day">
+            <view class="sleep-bar" style="height: {{item.hours * 15}}rpx;"></view>
+            <text class="sleep-day">{{item.day}}</text>
+          </view>
+        </view>
+        <view class="sleep-quality">
+          <text class="text-sm">睡眠质量: {{sleepData.quality}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 健康指标 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="text-md font-bold">健康指标</text>
+      </view>
+      <view class="health-metrics">
+        <view class="metric-card card" wx:for="{{healthMetrics}}" wx:key="type">
+          <view class="metric-header">
+            <view class="metric-icon gradient-bg">
+              <image src="{{item.icon}}" mode="aspectFit"/>
+            </view>
+            <text class="text-md">{{item.label}}</text>
+          </view>
+          <view class="metric-value">
+            <text class="text-lg font-bold">{{item.value}}</text>
+            <text class="text-sm text-secondary">{{item.unit}}</text>
+          </view>
+          <view class="metric-trend {{item.trend > 0 ? 'up' : 'down'}}">
+            <text class="text-sm">{{item.trend}}%</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部安全区域，防止内容被导航栏遮挡 -->
+    <view class="safe-area-bottom"></view>
+  </view>
+</scroll-view> 

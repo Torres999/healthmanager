@@ -1,0 +1,68 @@
+<page-header title="冥想" bind:heightChange="onHeaderHeightChange"></page-header>
+
+<!-- 特色课程标题 - 固定定位 -->
+<view class="section-title" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100;">
+  <text class="text-lg font-bold">今日推荐</text>
+</view>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container" style="padding-top: {{headerHeight - 60}}px;">
+    <!-- 占位元素，为固定定位的标题留出空间 -->
+    <view style="height: 20px;"></view>
+    
+    <!-- 特色课程 -->
+    <view class="featured-course card" style="margin-top: 0;">
+      <view class="featured-content">
+        <view class="featured-text">
+          <text class="featured-title">{{featuredCourse.title}}</text>
+          <text class="featured-description">{{featuredCourse.description}}</text>
+          <view class="featured-meta">
+            <text class="featured-duration">{{featuredCourse.duration}}分钟</text>
+            <text class="featured-level">{{featuredCourse.level}}</text>
+          </view>
+        </view>
+        <view class="featured-image-container">
+          <icon type="success" size="40" color="#FFFFFF" />
+        </view>
+      </view>
+      <button class="start-button gradient-bg" bindtap="startFeaturedCourse">开始冥想</button>
+    </view>
+
+    <!-- 冥想分类 -->
+    <view class="section-header">
+      <text class="text-md font-bold">冥想分类</text>
+    </view>
+    <view class="categories">
+      <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="navigateToCategory" data-id="{{item.id}}">
+        <view class="category-icon gradient-bg">
+          <icon type="{{index === 0 ? 'success' : (index === 1 ? 'info' : (index === 2 ? 'waiting' : 'warn'))}}" size="24" color="#FFFFFF" />
+        </view>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </view>
+
+    <!-- 最近课程 -->
+    <view class="section-header">
+      <text class="text-md font-bold">最近课程</text>
+      <text class="text-sm text-accent" bindtap="viewAllCourses">查看全部</text>
+    </view>
+    <view class="recent-courses">
+      <view class="course-card card" wx:for="{{recentCourses}}" wx:key="id" bindtap="startCourse" data-id="{{item.id}}">
+        <view class="course-icon gradient-bg">
+          <icon type="{{index === 0 ? 'success' : (index === 1 ? 'info' : 'waiting')}}" size="24" color="#FFFFFF" />
+        </view>
+        <view class="course-content">
+          <text class="course-title">{{item.title}}</text>
+          <text class="course-description text-secondary">{{item.description}}</text>
+          <view class="course-meta">
+            <text class="course-duration">{{item.duration}}分钟</text>
+            <text class="course-level">{{item.level}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部安全区域，防止内容被导航栏遮挡 -->
+    <view class="safe-area-bottom"></view>
+  </view>
+</scroll-view> 

@@ -1,0 +1,64 @@
+<view class="container">
+  <view class="header">
+    <text class="text-lg font-bold">运动记录</text>
+    <text class="text-sm text-secondary mt-20">查看您的运动历史</text>
+  </view>
+
+  <!-- 记录筛选 -->
+  <view class="filter-section card">
+    <view class="filter-tabs">
+      <view class="filter-tab {{currentFilter === 'all' ? 'active' : ''}}" bindtap="changeFilter" data-filter="all">
+        <text>全部</text>
+      </view>
+      <view class="filter-tab {{currentFilter === 'running' ? 'active' : ''}}" bindtap="changeFilter" data-filter="running">
+        <text>跑步</text>
+      </view>
+      <view class="filter-tab {{currentFilter === 'cycling' ? 'active' : ''}}" bindtap="changeFilter" data-filter="cycling">
+        <text>骑行</text>
+      </view>
+      <view class="filter-tab {{currentFilter === 'walking' ? 'active' : ''}}" bindtap="changeFilter" data-filter="walking">
+        <text>步行</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="records-list">
+    <view wx:if="{{filteredRecords.length === 0}}" class="empty-state">
+      <image src="/assets/icons/empty.png" mode="aspectFit" class="empty-icon"/>
+      <text class="text-md text-secondary">暂无运动记录</text>
+    </view>
+    
+    <view wx:for="{{filteredRecords}}" wx:key="id" class="record-card card" bindtap="viewRecordDetail" data-id="{{item.id}}">
+      <view class="record-header">
+        <view class="record-type">
+          <view class="record-icon gradient-bg">
+            <image src="{{item.icon}}" mode="aspectFit"/>
+          </view>
+          <view class="record-info">
+            <text class="text-md font-bold">{{item.type}}</text>
+            <text class="text-sm text-secondary">{{item.date}}</text>
+          </view>
+        </view>
+        <view class="record-duration">
+          <text class="text-lg font-bold">{{item.duration}}分钟</text>
+        </view>
+      </view>
+      
+      <view class="record-details">
+        <view class="detail-item">
+          <text class="text-md font-bold">{{item.calories}}</text>
+          <text class="text-sm text-secondary">消耗(千卡)</text>
+        </view>
+        <view class="detail-item">
+          <text class="text-md font-bold">{{item.distance}}</text>
+          <text class="text-sm text-secondary">距离(公里)</text>
+        </view>
+        <view class="detail-item">
+          <text class="text-md font-bold">{{item.pace}}</text>
+          <text class="text-sm text-secondary">配速</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> 

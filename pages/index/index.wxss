@@ -1,0 +1,345 @@
+/**index.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.scrollarea {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #aaa;
+  width: 80%;
+}
+
+.userinfo-avatar {
+  overflow: hidden;
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.usermotto {
+  margin-top: 200px;
+}
+
+.avatar-wrapper {
+  padding: 0;
+  width: 56px !important;
+  border-radius: 8px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.avatar {
+  display: block;
+  width: 56px;
+  height: 56px;
+}
+
+.nickname-wrapper {
+  display: flex;
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  border-top: .5px solid rgba(0, 0, 0, 0.1);
+  border-bottom: .5px solid rgba(0, 0, 0, 0.1);
+  color: black;
+}
+
+.nickname-label {
+  width: 105px;
+}
+
+.nickname-input {
+  flex: 1;
+}
+
+.header {
+  margin-bottom: 10rpx;
+}
+
+.title {
+  margin-bottom: 10rpx;
+}
+
+.greeting {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  margin-bottom: 20rpx;
+}
+
+.greeting .text-lg,
+.title .text-lg {
+  font-size: 36rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.greeting .nickname {
+  display: inline-block;
+  max-width: 200rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+.health-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.health-card {
+  display: flex;
+  align-items: center;
+  padding: 15rpx;
+}
+
+.card-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.card-icon image {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-value {
+  display: flex;
+  align-items: baseline;
+  margin-top: 8rpx;
+}
+
+.card-value text:not(:first-child) {
+  margin-left: 8rpx;
+}
+
+.trend-card {
+  margin-top: 30rpx;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.card-tabs {
+  display: flex;
+}
+
+.tab {
+  padding: 10rpx 20rpx;
+  margin-left: 10rpx;
+  border-radius: var(--border-radius-sm);
+  font-size: 24rpx;
+}
+
+.tab.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.chart-container {
+  height: 380rpx;
+  width: 100%;
+  position: relative;
+}
+
+.health-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.tasks-section {
+  margin-top: 20rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25rpx;
+}
+
+.task-card {
+  display: flex;
+  align-items: center;
+  padding: 15rpx;
+  margin-bottom: 25rpx;
+}
+
+.task-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.task-icon image {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.task-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-action button {
+  border: none;
+  color: white;
+  padding: 10rpx 30rpx;
+  border-radius: var(--border-radius-sm);
+  font-size: 24rpx;
+}
+
+.test-area {
+  margin: 20rpx;
+  padding: 20rpx;
+  background-color: var(--card-background, #151B2E);
+  border-radius: 12rpx;
+}
+
+.test-buttons {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20rpx;
+}
+
+.test-button {
+  flex: 1;
+  margin: 0 10rpx;
+  background-color: var(--primary-color, #4F6EF6);
+  color: white;
+  font-size: 28rpx;
+  padding: 10rpx 0;
+}
+
+.safe-area-bottom {
+  height: 100rpx; /* 底部导航栏的高度 */
+  width: 100%;
+}
+
+/* 图标样式 */
+.icon-image {
+  width: 48rpx;
+  height: 48rpx;
+  display: block;
+}
+
+.icon-image-sm {
+  width: 36rpx;
+  height: 36rpx;
+  display: block;
+}
+
+/* 心跳动画 */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.heart-icon.heartbeat {
+  animation: heartbeat 1.2s infinite ease-in-out;
+}
+
+/* 图表卡片样式 */
+.chart-card {
+  margin-top: 20rpx;
+}
+
+/* 建议卡片样式 */
+.suggestion-card {
+  margin-top: 30rpx;
+}
+
+.suggestion-content {
+  margin-top: 20rpx;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  margin-top: 20rpx;
+}
+
+.suggestion-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.suggestion-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 15rpx 0;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.1);
+  margin-top: 15rpx;
+}
+
+.activity-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.activity-day {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-bottom: 8rpx;
+}
+
+.activity-value {
+  font-size: 24rpx;
+  color: var(--text-primary);
+}

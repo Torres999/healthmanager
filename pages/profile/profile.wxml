@@ -1,0 +1,124 @@
+<page-header title="个人资料" bind:heightChange="onHeaderHeightChange"></page-header>
+
+<!-- 用户信息标题 - 固定定位 -->
+<view class="profile-title" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100;">
+  <text class="text-lg font-bold">我的资料</text>
+</view>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container" style="padding-top: {{headerHeight - 60}}px;">
+    <!-- 占位元素，为固定定位的标题留出空间 -->
+    <view style="height: 20px;"></view>
+    
+    <!-- 用户信息卡片 -->
+    <view class="user-card card card-hover" style="margin-top: 0;">
+      <view class="avatar-container">
+        <view class="avatar">
+          <open-data type="userAvatarUrl" wx:if="{{hasUserInfo}}"></open-data>
+          <view class="avatar-placeholder" wx:else>
+            <icon type="userinfo" size="60" color="#4F6EF6" />
+          </view>
+        </view>
+      </view>
+      <view class="user-info">
+        <view class="nickname">
+          <open-data type="userNickName" wx:if="{{hasUserInfo}}"></open-data>
+          <text wx:else>{{userInfo.nickName}}</text>
+        </view>
+        <view class="signature text-secondary">{{userInfo.signature}}</view>
+      </view>
+      <view class="edit-btn" bindtap="editProfile">
+        <icon type="edit" size="20" color="#FFFFFF" />
+      </view>
+    </view>
+
+    <!-- 用户统计数据 -->
+    <view class="stats-card card card-hover">
+      <view class="stat-item">
+        <text class="stat-value">{{userStats.exerciseDays || 0}}</text>
+        <text class="stat-label text-secondary">运动天数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{userStats.meditationMinutes || 0}}</text>
+        <text class="stat-label text-secondary">冥想分钟</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{userStats.achievements || 0}}</text>
+        <text class="stat-label text-secondary">获得成就</text>
+      </view>
+    </view>
+
+    <!-- 健康档案 -->
+    <view class="health-profile card card-hover">
+      <text class="text-md font-bold">健康档案</text>
+      <view class="health-data">
+        <view class="health-item">
+          <text class="text-sm text-secondary">身高</text>
+          <text class="text-md">{{healthProfile.height}}cm</text>
+        </view>
+        <view class="health-item">
+          <text class="text-sm text-secondary">体重</text>
+          <text class="text-md">{{healthProfile.weight}}kg</text>
+        </view>
+        <view class="health-item">
+          <text class="text-sm text-secondary">BMI</text>
+          <text class="text-md">{{healthProfile.bmi}}</text>
+        </view>
+        <view class="health-item">
+          <text class="text-sm text-secondary">血型</text>
+          <text class="text-md">{{healthProfile.bloodType}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 健康目标 -->
+    <view class="goals-section">
+      <view class="section-header">
+        <text class="text-md font-bold">健康目标</text>
+        <text class="text-sm text-accent" bindtap="editGoals">编辑</text>
+      </view>
+      <view class="goals-list">
+        <view class="goal-card card card-hover" wx:for="{{healthGoals}}" wx:key="id">
+          <view class="goal-icon gradient-bg">
+            <icon type="{{item.iconType}}" size="24" color="#FFFFFF" />
+          </view>
+          <view class="goal-content">
+            <text class="goal-title">{{item.title}}</text>
+            <text class="goal-description text-secondary">{{item.description}}</text>
+            <progress class="goal-progress" percent="{{item.progress}}" stroke-width="3" backgroundColor="#1A2235" activeColor="#4F6EF6"/>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 成就 -->
+    <view class="achievements-section">
+      <view class="section-header">
+        <text class="text-md font-bold">我的成就</text>
+        <text class="text-sm text-accent" bindtap="viewAllAchievements">查看全部</text>
+      </view>
+      <view class="achievements-grid">
+        <view class="achievement-item" wx:for="{{achievements}}" wx:key="id">
+          <view class="achievement-icon {{item.unlocked ? 'gradient-bg' : 'locked'}}">
+            <icon type="{{item.iconType}}" size="24" color="{{item.unlocked ? '#FFFFFF' : '#666666'}}" />
+          </view>
+          <text class="achievement-name {{!item.unlocked ? 'text-secondary' : ''}}">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 设置菜单 -->
+    <view class="settings-menu card card-hover">
+      <view class="menu-item" wx:for="{{menuItems}}" wx:key="id" bindtap="navigateToMenu" data-url="{{item.url}}">
+        <view class="menu-icon gradient-bg">
+          <icon type="{{item.iconType}}" size="20" color="#FFFFFF" />
+        </view>
+        <text class="menu-title">{{item.title}}</text>
+        <icon type="arrow" size="12" color="#94A3B8" />
+      </view>
+    </view>
+
+    <!-- 底部安全区域，防止内容被导航栏遮挡 -->
+    <view class="safe-area-bottom"></view>
+  </view>
+</scroll-view> 

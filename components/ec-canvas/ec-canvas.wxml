@@ -1,0 +1,23 @@
+<block wx:if="{{isUseNewCanvas}}">
+  <canvas 
+    class="ec-canvas"
+    type="2d"
+    id="{{canvasId}}" 
+    canvas-id="{{canvasId}}"
+    style="width: {{ec.width || '100%'}}; height: {{ec.height || '300px'}};"
+    bindtouchstart="{{ ec.disableTouch ? '' : 'touchStart' }}"
+    bindtouchmove="{{ ec.disableTouch ? '' : 'touchMove' }}"
+    bindtouchend="{{ ec.disableTouch ? '' : 'touchEnd' }}"
+  ></canvas>
+</block>
+
+<block wx:else>
+  <canvas 
+    class="ec-canvas" 
+    canvas-id="{{ canvasId }}"
+    style="width: {{ec.width || '100%'}}; height: {{ec.height || '300px'}};"
+    bindtouchstart="{{ ec.disableTouch ? '' : 'touchStart' }}"
+    bindtouchmove="{{ ec.disableTouch ? '' : 'touchMove' }}"
+    bindtouchend="{{ ec.disableTouch ? '' : 'touchEnd' }}"
+  ></canvas>
+</block> 

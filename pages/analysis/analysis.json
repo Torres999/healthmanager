@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "数据分析",
+  "usingComponents": {
+    "ec-canvas": "../../components/ec-canvas/ec-canvas"
+  },
+  "backgroundColor": "#0B1121"
+} 

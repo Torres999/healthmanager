@@ -1,0 +1,9 @@
+<page-header title="示例页面" showBack="{{true}}" bind:heightChange="onHeaderHeightChange"></page-header>
+
+<view class="container" style="padding-top: {{contentTop}}px; padding-bottom: 130rpx;">
+  <view class="card">
+    <view class="text-lg font-bold">页面内容</view>
+    <view class="text-md mt-20">这是一个示例页面，展示如何使用页面头部组件。</view>
+    <view class="text-md mt-20">页面内容与胶囊按钮顶部对齐，提供更好的视觉体验。</view>
+  </view>
+</view> 

@@ -1,0 +1,152 @@
+.container {
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.exercise-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60rpx;
+}
+
+.exercise-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.exercise-icon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+
+.exercise-icon image {
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.timer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 60rpx;
+}
+
+.timer-circle {
+  width: 400rpx;
+  height: 400rpx;
+  border-radius: 50%;
+  background: var(--card-background, #1A2235);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.2);
+}
+
+.timer-value {
+  font-size: 80rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.timer-separator {
+  margin: 0 10rpx;
+}
+
+.exercise-data {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 60rpx;
+}
+
+.data-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.control-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 40rpx;
+  margin-bottom: 60rpx;
+}
+
+.control-btn {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: white;
+}
+
+.start-btn {
+  background: linear-gradient(135deg, #4F6EF6, #3B5FE9);
+}
+
+.pause-btn {
+  background: linear-gradient(135deg, #F6A54F, #E9953B);
+}
+
+.resume-btn {
+  background: linear-gradient(135deg, #4F6EF6, #3B5FE9);
+}
+
+.stop-btn {
+  background: linear-gradient(135deg, #F65F4F, #E93B3B);
+}
+
+.hidden {
+  display: none;
+}
+
+.finish-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.save-btn {
+  width: 100%;
+  height: 90rpx;
+  border-radius: 45rpx;
+  color: white;
+  font-size: 32rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cancel-btn {
+  width: 100%;
+  height: 90rpx;
+  border-radius: 45rpx;
+  background: transparent;
+  border: 2rpx solid var(--border-color, #2A3649);
+  color: var(--text-secondary, #94A3B8);
+  font-size: 32rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} 

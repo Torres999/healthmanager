@@ -1,0 +1,108 @@
+.container {
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.header {
+  margin-bottom: 40rpx;
+}
+
+.filter-section {
+  margin-bottom: 40rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  background: var(--card-background, #1A2235);
+}
+
+.filter-tabs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter-tab {
+  padding: 15rpx 30rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  color: var(--text-secondary, #94A3B8);
+  transition: all 0.3s ease;
+}
+
+.filter-tab.active {
+  background: var(--primary-color, #4F6EF6);
+  color: white;
+}
+
+.records-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-icon {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.5;
+}
+
+.record-card {
+  padding: 30rpx;
+  border-radius: 20rpx;
+  background: var(--card-background, #1A2235);
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.record-type {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.record-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.record-icon image {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.record-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5rpx;
+}
+
+.record-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+} 

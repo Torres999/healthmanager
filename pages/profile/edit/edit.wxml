@@ -1,0 +1,58 @@
+<view class="container">
+  <view class="edit-header">
+    <text class="text-lg font-bold">编辑个人资料</text>
+    <text class="text-sm text-secondary">完善您的个人信息</text>
+  </view>
+
+  <view class="avatar-section">
+    <image class="avatar" src="{{userInfo.avatarUrl || '/assets/images/default-avatar.png'}}" mode="aspectFill"/>
+    <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">更换头像</button>
+  </view>
+
+  <view class="form-section card">
+    <view class="form-item">
+      <text class="form-label">昵称</text>
+      <input type="nickname" class="form-input" placeholder="请输入昵称" value="{{userInfo.nickName}}" bindchange="onNicknameChange"/>
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">个性签名</text>
+      <input class="form-input" placeholder="请输入个性签名" value="{{userInfo.signature}}" bindinput="onSignatureInput"/>
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">性别</text>
+      <picker bindchange="onGenderChange" value="{{genderIndex}}" range="{{genders}}">
+        <view class="picker-view">
+          <text>{{genders[genderIndex]}}</text>
+          <image class="arrow-icon" src="/assets/icons/arrow-right.png" mode="aspectFit"/>
+        </view>
+      </picker>
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">生日</text>
+      <picker mode="date" bindchange="onBirthdayChange" value="{{userInfo.birthday}}">
+        <view class="picker-view">
+          <text>{{userInfo.birthday || '请选择生日'}}</text>
+          <image class="arrow-icon" src="/assets/icons/arrow-right.png" mode="aspectFit"/>
+        </view>
+      </picker>
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">身高(cm)</text>
+      <input type="digit" class="form-input" placeholder="请输入身高" value="{{userInfo.height}}" bindinput="onHeightInput"/>
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">体重(kg)</text>
+      <input type="digit" class="form-input" placeholder="请输入体重" value="{{userInfo.weight}}" bindinput="onWeightInput"/>
+    </view>
+  </view>
+
+  <view class="action-buttons">
+    <button class="gradient-bg save-btn" bindtap="saveUserInfo">保存</button>
+    <button class="cancel-btn" bindtap="cancelEdit">取消</button>
+  </view>
+</view> 

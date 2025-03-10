@@ -1,0 +1,70 @@
+<view class="container">
+  <view class="header">
+    <view class="title">运动详情</view>
+    <view class="subtitle">{{record.date}}</view>
+  </view>
+
+  <view class="record-card">
+    <view class="record-header">
+      <view class="record-type">
+        <view class="record-icon" style="background: {{record.iconBg || '#4F6EF6'}}">
+          <image src="/assets/icons/{{record.type}}.png" mode="aspectFit"></image>
+        </view>
+        <view class="record-info">
+          <text class="record-name">{{record.name}}</text>
+          <text class="record-date">{{record.date}} {{record.time}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{record.duration}}分钟</text>
+        <text class="stat-label">时长</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{record.calories}}千卡</text>
+        <text class="stat-label">消耗</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{record.distance}}公里</text>
+        <text class="stat-label">距离</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{record.pace}}</text>
+        <text class="stat-label">配速</text>
+      </view>
+    </view>
+
+    <view wx:if="{{record.route}}" class="map-section">
+      <view class="section-title">运动轨迹</view>
+      <map class="route-map" 
+           latitude="{{record.route.startLat}}" 
+           longitude="{{record.route.startLng}}" 
+           markers="{{record.route.markers}}"
+           polyline="{{record.route.polyline}}"
+           show-location="true"
+           scale="14">
+      </map>
+    </view>
+
+    <view class="section">
+      <view class="section-title">心率区间</view>
+      <view class="heart-rate-chart">
+        <canvas canvas-id="heartRateChart" style="width: 100%; height: 200px;"></canvas>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">备注</view>
+      <view class="notes">
+        <text>{{record.notes || '无备注'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="action-buttons">
+    <button class="btn btn-secondary" bindtap="shareRecord">分享</button>
+    <button class="btn btn-primary" bindtap="editRecord">编辑</button>
+  </view>
+</view> 

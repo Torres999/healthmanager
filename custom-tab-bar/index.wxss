@@ -1,0 +1,174 @@
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  background: var(--card-background, #1A2235);
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+.tab-bar-border {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 1rpx;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tab-bar-item {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.tab-bar-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 40rpx;
+  height: 4rpx;
+  background: var(--primary-color, #4F6EF6);
+  border-radius: 2rpx;
+}
+
+.tab-icon {
+  width: 54rpx;
+  height: 54rpx;
+  position: relative;
+}
+
+.icon-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-image {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.tab-text {
+  font-size: 24rpx;
+  margin-top: 4rpx;
+}
+
+/* 首页图标 */
+.icon-home {
+  width: 54rpx;
+  height: 54rpx;
+  position: relative;
+}
+
+.icon-home::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid currentColor;
+  border-radius: 50%;
+}
+
+/* 运动图标 */
+.icon-sport {
+  width: 54rpx;
+  height: 54rpx;
+  position: relative;
+}
+
+.icon-sport::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid currentColor;
+  border-radius: 4rpx;
+}
+
+/* 冥想图标 */
+.icon-meditation {
+  width: 54rpx;
+  height: 54rpx;
+  position: relative;
+}
+
+.icon-meditation::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid currentColor;
+  border-radius: 50%;
+}
+
+/* 数据图标 */
+.icon-analysis {
+  width: 54rpx;
+  height: 54rpx;
+  position: relative;
+}
+
+.icon-analysis .bar-1,
+.icon-analysis .bar-2,
+.icon-analysis .bar-3 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4rpx;
+  background-color: currentColor;
+}
+
+.icon-analysis .bar-1 {
+  height: 20rpx;
+  top: 20rpx;
+}
+
+.icon-analysis .bar-2 {
+  height: 30rpx;
+  top: 15rpx;
+}
+
+.icon-analysis .bar-3 {
+  height: 40rpx;
+  top: 10rpx;
+}
+
+/* 个人图标 */
+.icon-profile {
+  width: 54rpx;
+  height: 54rpx;
+  position: relative;
+}
+
+.icon-profile::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid currentColor;
+  border-radius: 50%;
+} 

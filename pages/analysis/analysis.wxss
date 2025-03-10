@@ -1,0 +1,166 @@
+.header {
+  margin-bottom: 40rpx;
+}
+
+.title {
+  margin-bottom: 20rpx;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.overview-card {
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.overview-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overview-icon image {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.overview-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5rpx;
+}
+
+.section {
+  margin-bottom: 40rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.chart-card {
+  padding: 20rpx;
+  height: 400rpx;
+}
+
+.chart {
+  width: 100%;
+  height: 100%;
+}
+
+ec-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.meditation-stats {
+  padding: 30rpx;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.stats-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.streak-calendar {
+  height: 200rpx;
+  /* 日历组件样式待添加 */
+}
+
+.health-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.metric-card {
+  padding: 20rpx;
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  gap: 15rpx;
+  margin-bottom: 20rpx;
+}
+
+.metric-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 15rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-icon image {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.metric-value {
+  display: flex;
+  align-items: baseline;
+  gap: 10rpx;
+  margin-bottom: 10rpx;
+}
+
+.metric-trend {
+  display: flex;
+  align-items: center;
+  gap: 5rpx;
+}
+
+.metric-trend.up {
+  color: #4CAF50;
+}
+
+.metric-trend.down {
+  color: #F44336;
+}
+
+.activity-summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.1);
+  margin-top: 20rpx;
+}
+
+.activity-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.activity-day {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-bottom: 8rpx;
+}
+
+.activity-value {
+  font-size: 24rpx;
+  color: var(--text-primary);
+} 

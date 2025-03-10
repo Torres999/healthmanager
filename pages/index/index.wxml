@@ -1,0 +1,140 @@
+<!--index.wxml-->
+<page-header title="健康管理" bind:heightChange="onHeaderHeightChange"></page-header>
+
+<!-- 顶部欢迎区域 - 直接放在page-header后面，不在scroll-view内 -->
+<view class="header" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100;">
+  <view class="title" style="margin-bottom: 0;">
+    <text class="text-lg font-bold">早安，{{userInfo.nickName || 'David'}}</text>
+    <text class="text-sm text-secondary mt-20">开启充满活力的一天</text>
+  </view>
+</view>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container" style="padding-top: {{headerHeight - 60}}px;">
+    <!-- 占位元素，为固定定位的header留出空间 -->
+    <view style="height: 40rpx;"></view>
+    
+    <!-- 健康指标卡片区域 -->
+    <view class="health-cards">
+      <!-- 步数卡片 -->
+      <view class="card health-card card-hover">
+        <view class="card-icon gradient-bg">
+          <icon type="success" size="24" color="#FFFFFF" />
+        </view>
+        <view class="card-content">
+          <text class="text-sm text-secondary">今日步数</text>
+          <view class="card-value">
+            <text class="text-lg font-bold">{{healthData.steps}}</text>
+            <text class="text-sm text-accent" wx:if="{{healthData.stepsChange > 0}}">+{{healthData.stepsChange}}% ↑</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 心率卡片 -->
+      <view class="card health-card card-hover">
+        <view class="card-icon gradient-bg {{heartbeat ? 'heartbeat' : ''}}">
+          <icon type="warn" size="24" color="#FFFFFF" />
+        </view>
+        <view class="card-content">
+          <text class="text-sm text-secondary">实时心率</text>
+          <view class="card-value">
+            <text class="text-lg font-bold">{{healthData.heartRate}}</text>
+            <text class="text-sm text-secondary">bpm</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 卡路里卡片 -->
+      <view class="card health-card card-hover">
+        <view class="card-icon gradient-bg">
+          <icon type="info" size="24" color="#FFFFFF" />
+        </view>
+        <view class="card-content">
+          <text class="text-sm text-secondary">消耗卡路里</text>
+          <view class="card-value">
+            <text class="text-lg font-bold">{{healthData.calories}}</text>
+            <text class="text-sm">千卡</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 睡眠卡片 -->
+      <view class="card health-card card-hover">
+        <view class="card-icon gradient-bg">
+          <icon type="waiting" size="24" color="#FFFFFF" />
+        </view>
+        <view class="card-content">
+          <text class="text-sm text-secondary">睡眠时长</text>
+          <view class="card-value">
+            <text class="text-lg font-bold">{{healthData.sleep}}</text>
+            <text class="text-sm">小时</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 活动图表区域 -->
+    <view class="card chart-card card-hover">
+      <view class="card-header">
+        <text class="text-md font-bold">本周活动</text>
+        <text class="text-sm text-secondary">查看详情</text>
+      </view>
+      <view class="chart-container">
+        <ec-canvas id="activity-chart" canvas-id="activity-chart" ec="{{ ec }}"></ec-canvas>
+      </view>
+      <view class="activity-summary">
+        <view class="activity-item">
+          <text class="activity-day">周一</text>
+          <text class="activity-value">30分钟</text>
+        </view>
+        <view class="activity-item">
+          <text class="activity-day">周二</text>
+          <text class="activity-value">40分钟</text>
+        </view>
+        <view class="activity-item">
+          <text class="activity-day">周三</text>
+          <text class="activity-value">35分钟</text>
+        </view>
+        <view class="activity-item">
+          <text class="activity-day">周四</text>
+          <text class="activity-value">50分钟</text>
+        </view>
+        <view class="activity-item">
+          <text class="activity-day">周五</text>
+          <text class="activity-value">45分钟</text>
+        </view>
+        <view class="activity-item">
+          <text class="activity-day">周六</text>
+          <text class="activity-value">60分钟</text>
+        </view>
+        <view class="activity-item">
+          <text class="activity-day">周日</text>
+          <text class="activity-value">70分钟</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 今日任务 -->
+    <view class="tasks-section">
+      <view class="section-header">
+        <text class="text-md font-bold">今日任务</text>
+        <text class="text-sm text-accent" bindtap="viewAllTasks">查看全部</text>
+      </view>
+      <view class="card task-card card-hover" wx:for="{{tasks}}" wx:key="id">
+        <view class="task-icon gradient-bg">
+          <icon type="{{index === 0 ? 'success' : 'info'}}" size="24" color="#FFFFFF" />
+        </view>
+        <view class="task-content">
+          <text class="text-md">{{item.title}}</text>
+          <text class="text-sm text-secondary">{{item.description}}</text>
+        </view>
+        <view class="task-action">
+          <button class="gradient-bg" bindtap="startTask" data-id="{{item.id}}">开始</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部安全区域，防止内容被导航栏遮挡 -->
+    <view class="safe-area-bottom"></view>
+  </view>
+</scroll-view>

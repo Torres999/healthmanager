@@ -1,0 +1,59 @@
+<view class="container">
+  <!-- 运动信息 -->
+  <view class="exercise-header">
+    <view class="exercise-type">
+      <view class="exercise-icon gradient-bg">
+        <image src="{{exerciseIcon}}" mode="aspectFit"/>
+      </view>
+      <text class="text-lg font-bold">{{exerciseName}}</text>
+    </view>
+    <text class="text-md text-secondary">{{status === 'ready' ? '准备开始' : status === 'active' ? '运动中' : '已完成'}}</text>
+  </view>
+
+  <!-- 计时器 -->
+  <view class="timer-container">
+    <view class="timer-circle">
+      <view class="timer-value">
+        <text class="timer-minutes">{{formatTime.minutes}}</text>
+        <text class="timer-separator">:</text>
+        <text class="timer-seconds">{{formatTime.seconds}}</text>
+      </view>
+      <text class="text-md text-secondary">{{status === 'ready' ? '点击开始' : status === 'active' ? '点击暂停' : '运动结束'}}</text>
+    </view>
+  </view>
+
+  <!-- 运动数据 -->
+  <view class="exercise-data">
+    <view class="data-item">
+      <text class="text-lg font-bold">{{calories}}</text>
+      <text class="text-sm text-secondary">消耗(千卡)</text>
+    </view>
+    <view class="data-item">
+      <text class="text-lg font-bold">{{distance}}</text>
+      <text class="text-sm text-secondary">距离(公里)</text>
+    </view>
+    <view class="data-item">
+      <text class="text-lg font-bold">{{pace}}</text>
+      <text class="text-sm text-secondary">配速</text>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-buttons">
+    <view class="control-btn {{status === 'ready' ? 'start-btn' : status === 'active' ? 'pause-btn' : 'hidden'}}" bindtap="toggleExercise">
+      <text>{{status === 'ready' ? '开始' : '暂停'}}</text>
+    </view>
+    <view class="control-btn resume-btn {{status === 'paused' ? '' : 'hidden'}}" bindtap="resumeExercise">
+      <text>继续</text>
+    </view>
+    <view class="control-btn stop-btn {{status === 'active' || status === 'paused' ? '' : 'hidden'}}" bindtap="stopExercise">
+      <text>结束</text>
+    </view>
+  </view>
+
+  <!-- 完成后的操作 -->
+  <view class="finish-actions {{status === 'finished' ? '' : 'hidden'}}">
+    <button class="gradient-bg save-btn" bindtap="saveRecord">保存记录</button>
+    <button class="cancel-btn" bindtap="discardRecord">放弃记录</button>
+  </view>
+</view> 

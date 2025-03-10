@@ -1,0 +1,154 @@
+/* pages/sport/sport.wxss */
+.header {
+  margin-bottom: 0;
+}
+
+.title {
+  margin-bottom: 0;
+}
+
+.overview-card {
+  padding: 30rpx;
+  margin-top: 60rpx;
+}
+
+.overview-data {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.data-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.progress-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  margin-top: 10rpx;
+}
+
+.section {
+  margin-bottom: 40rpx;
+  margin-top: 15rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.sport-types {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+}
+
+.sport-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx;
+  gap: 15rpx;
+}
+
+.sport-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 25rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sport-icon image {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.records {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.record-card {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+}
+
+.record-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.record-icon image {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.record-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5rpx;
+}
+
+.record-data {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5rpx;
+}
+
+.exercise-types {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.exercise-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx;
+}
+
+.exercise-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15rpx;
+}
+
+.icon-image {
+  width: 40rpx;
+  height: 40rpx;
+  filter: invert(100%);
+}
+
+.exercise-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  margin-bottom: 5rpx;
+}
+
+.exercise-desc {
+  font-size: 24rpx;
+} 

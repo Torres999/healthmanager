@@ -1,0 +1,100 @@
+<page-header title="运动中心" bind:heightChange="onHeaderHeightChange"></page-header>
+
+<!-- 顶部运动数据概览 - 固定定位 -->
+<view class="header" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100;">
+  <view class="title" style="margin-bottom: 0;">
+    <text class="text-lg font-bold">运动中心</text>
+    <text class="text-sm text-secondary mt-20">今日运动数据</text>
+  </view>
+</view>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container" style="padding-top: {{headerHeight - 60}}px;">
+    <!-- 占位元素，为固定定位的header留出空间 -->
+    <view style="height: 20px;"></view>
+    
+    <view class="overview-card card" id="overviewCard" style="margin-top: 0;">
+      <view class="overview-data">
+        <view class="data-item">
+          <text class="text-lg font-bold">{{exerciseData.minutes}}</text>
+          <text class="text-sm text-secondary">运动时长(分钟)</text>
+        </view>
+        <view class="data-item">
+          <text class="text-lg font-bold">{{exerciseData.calories}}</text>
+          <text class="text-sm text-secondary">消耗(千卡)</text>
+        </view>
+        <view class="data-item">
+          <text class="text-lg font-bold">{{exerciseData.count}}</text>
+          <text class="text-sm text-secondary">运动次数</text>
+        </view>
+      </view>
+      <view class="progress-bar">
+        <progress percent="{{exerciseData.progress}}" stroke-width="3" backgroundColor="#1A2235" activeColor="#4F6EF6"/>
+        <text class="text-sm text-secondary">目标：{{exerciseData.goal}}分钟</text>
+      </view>
+    </view>
+
+    <!-- 运动类型选择 -->
+    <view class="section">
+      <text class="text-md font-bold" style="display: block; margin: 30rpx 10rpx 25rpx 10rpx;">选择运动</text>
+      <view class="exercise-types">
+        <view class="exercise-type card card-hover" bindtap="startExercise" data-type="running">
+          <view class="exercise-icon gradient-bg">
+            <image src="/assets/icons/running.svg" mode="aspectFit" class="icon-image"></image>
+          </view>
+          <text class="exercise-name">跑步</text>
+          <text class="exercise-desc text-secondary">户外/室内</text>
+        </view>
+        <view class="exercise-type card card-hover" bindtap="startExercise" data-type="cycling">
+          <view class="exercise-icon gradient-bg">
+            <image src="/assets/icons/cycling.svg" mode="aspectFit" class="icon-image"></image>
+          </view>
+          <text class="exercise-name">骑行</text>
+          <text class="exercise-desc text-secondary">自行车</text>
+        </view>
+        <view class="exercise-type card card-hover" bindtap="startExercise" data-type="yoga">
+          <view class="exercise-icon gradient-bg">
+            <image src="/assets/icons/yoga.svg" mode="aspectFit" class="icon-image"></image>
+          </view>
+          <text class="exercise-name">瑜伽</text>
+          <text class="exercise-desc text-secondary">冥想放松</text>
+        </view>
+        <view class="exercise-type card card-hover" bindtap="startExercise" data-type="walking">
+          <view class="exercise-icon gradient-bg">
+            <image src="/assets/icons/walking.svg" mode="aspectFit" class="icon-image"></image>
+          </view>
+          <text class="exercise-name">步行</text>
+          <text class="exercise-desc text-secondary">日常活动</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 运动记录 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="text-md font-bold">运动记录</text>
+        <text class="text-sm text-accent" bindtap="viewAllRecords">查看全部</text>
+      </view>
+      <view class="record-list">
+        <view class="record-item card card-hover" wx:for="{{exerciseRecords}}" wx:key="id">
+          <view class="record-icon gradient-bg">
+            <image src="{{item.icon}}" mode="aspectFit" class="icon-image"></image>
+          </view>
+          <view class="record-content">
+            <view class="record-title">
+              <text class="text-md">{{item.type}}</text>
+              <text class="text-sm text-secondary">{{item.date}}</text>
+            </view>
+            <view class="record-stats">
+              <text class="text-sm text-secondary">{{item.duration}} 分钟</text>
+              <text class="text-sm text-secondary">{{item.calories}} 千卡</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部安全区域，防止内容被导航栏遮挡 -->
+    <view class="safe-area-bottom"></view>
+  </view>
+</scroll-view> 

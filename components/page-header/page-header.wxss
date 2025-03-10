@@ -1,0 +1,56 @@
+.page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: var(--background-color, #0B1121);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 30rpx;
+  z-index: 10;
+}
+
+.back-arrow {
+  width: 20rpx;
+  height: 20rpx;
+  border-top: 4rpx solid var(--text-primary, #FFFFFF);
+  border-left: 4rpx solid var(--text-primary, #FFFFFF);
+  transform: rotate(-45deg);
+}
+
+.title {
+  width: 100%;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 500;
+  color: var(--text-primary, #FFFFFF);
+}
+
+.title.has-back {
+  padding-left: 60rpx;
+}
+
+/* 内容对齐标记，用于调试 */
+.content-align-marker {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 2rpx;
+  background-color: rgba(255, 0, 0, 0.5);
+  z-index: 999;
+  pointer-events: none;
+} 

@@ -1,0 +1,48 @@
+<view class="container">
+  <!-- 课程信息 -->
+  <view class="course-header">
+    <image class="course-image" src="{{course.image}}" mode="aspectFill"/>
+    <view class="course-info">
+      <text class="text-lg font-bold">{{course.title}}</text>
+      <text class="text-sm text-secondary">{{course.duration}}分钟</text>
+      <text class="text-sm text-secondary mt-20">{{course.description}}</text>
+    </view>
+  </view>
+
+  <!-- 冥想状态 -->
+  <view class="meditation-status">
+    <view class="status-circle {{status === 'active' ? 'active' : ''}}">
+      <view class="timer-value">
+        <text class="timer-minutes">{{formatTime.minutes}}</text>
+        <text class="timer-separator">:</text>
+        <text class="timer-seconds">{{formatTime.seconds}}</text>
+      </view>
+      <text class="text-md text-secondary">{{statusText}}</text>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-buttons">
+    <view class="control-btn {{status === 'ready' ? 'start-btn' : status === 'active' ? 'pause-btn' : 'hidden'}}" bindtap="toggleMeditation">
+      <text>{{status === 'ready' ? '开始' : '暂停'}}</text>
+    </view>
+    <view class="control-btn resume-btn {{status === 'paused' ? '' : 'hidden'}}" bindtap="resumeMeditation">
+      <text>继续</text>
+    </view>
+    <view class="control-btn stop-btn {{status === 'active' || status === 'paused' ? '' : 'hidden'}}" bindtap="stopMeditation">
+      <text>结束</text>
+    </view>
+  </view>
+
+  <!-- 完成后的操作 -->
+  <view class="finish-actions {{status === 'finished' ? '' : 'hidden'}}">
+    <button class="gradient-bg save-btn" bindtap="saveMeditation">保存记录</button>
+    <button class="cancel-btn" bindtap="discardMeditation">放弃记录</button>
+  </view>
+
+  <!-- 冥想提示 -->
+  <view class="meditation-tips card {{status === 'active' ? '' : 'hidden'}}">
+    <text class="text-md font-bold">冥想提示</text>
+    <text class="text-sm text-secondary mt-20">{{currentTip}}</text>
+  </view>
+</view> 

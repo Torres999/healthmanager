@@ -1,0 +1,71 @@
+<view class="container">
+  <view class="header">
+    <view class="title">编辑运动记录</view>
+    <view class="subtitle">修改您的运动数据</view>
+  </view>
+
+  <view class="form-card">
+    <view class="form-group">
+      <view class="form-label">运动类型</view>
+      <view class="type-selector">
+        <view class="type-option {{record.type === 'running' ? 'active' : ''}}" bindtap="changeType" data-type="running">
+          <view class="type-icon" style="background: #4F6EF6">
+            <image src="/assets/icons/running.png" mode="aspectFit"></image>
+          </view>
+          <text>跑步</text>
+        </view>
+        <view class="type-option {{record.type === 'cycling' ? 'active' : ''}}" bindtap="changeType" data-type="cycling">
+          <view class="type-icon" style="background: #22C55E">
+            <image src="/assets/icons/cycling.png" mode="aspectFit"></image>
+          </view>
+          <text>骑行</text>
+        </view>
+        <view class="type-option {{record.type === 'walking' ? 'active' : ''}}" bindtap="changeType" data-type="walking">
+          <view class="type-icon" style="background: #F59E0B">
+            <image src="/assets/icons/walking.png" mode="aspectFit"></image>
+          </view>
+          <text>步行</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">日期</view>
+      <picker mode="date" value="{{record.date}}" bindchange="dateChange">
+        <view class="form-input">{{record.date}}</view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">时间</view>
+      <picker mode="time" value="{{record.time}}" bindchange="timeChange">
+        <view class="form-input">{{record.time}}</view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">时长 (分钟)</view>
+      <input class="form-input" type="number" value="{{record.duration}}" bindinput="durationChange" />
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">距离 (公里)</view>
+      <input class="form-input" type="digit" value="{{record.distance}}" bindinput="distanceChange" />
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">消耗 (千卡)</view>
+      <input class="form-input" type="number" value="{{record.calories}}" bindinput="caloriesChange" />
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">备注</view>
+      <textarea class="form-textarea" value="{{record.notes}}" bindinput="notesChange" placeholder="添加备注..." />
+    </view>
+  </view>
+
+  <view class="action-buttons">
+    <button class="btn btn-secondary" bindtap="cancelEdit">取消</button>
+    <button class="btn btn-primary" bindtap="saveRecord">保存</button>
+  </view>
+</view> 

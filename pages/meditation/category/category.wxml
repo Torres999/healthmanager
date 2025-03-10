@@ -1,0 +1,24 @@
+<view class="container">
+  <view class="header">
+    <text class="text-lg font-bold">{{category.name || '冥想分类'}}</text>
+    <text class="text-sm text-secondary mt-20">{{category.description || '探索专业的冥想课程'}}</text>
+  </view>
+
+  <view class="courses-list">
+    <view wx:if="{{courses.length === 0}}" class="empty-state">
+      <image src="/assets/icons/empty.png" mode="aspectFit" class="empty-icon"/>
+      <text class="text-md text-secondary">暂无冥想课程</text>
+    </view>
+    
+    <view wx:for="{{courses}}" wx:key="id" class="course-card" bindtap="viewCourseDetail" data-id="{{item.id}}">
+      <image src="{{item.image}}" mode="aspectFill" class="course-image"/>
+      <view class="course-info">
+        <view class="course-header">
+          <text class="course-title">{{item.title}}</text>
+          <text class="course-duration">{{item.duration}}分钟</text>
+        </view>
+        <text class="course-description">{{item.description}}</text>
+      </view>
+    </view>
+  </view>
+</view> 

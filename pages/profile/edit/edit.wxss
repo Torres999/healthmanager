@@ -1,0 +1,120 @@
+.container {
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.edit-header {
+  margin-bottom: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.avatar {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 50%;
+  margin-bottom: 20rpx;
+  border: 4rpx solid var(--primary-color, #4F6EF6);
+}
+
+.avatar-btn {
+  background: transparent;
+  border: 2rpx solid var(--border-color, #2A3649);
+  color: var(--text-secondary, #94A3B8);
+  font-size: 28rpx;
+  padding: 10rpx 30rpx;
+  border-radius: 30rpx;
+}
+
+.form-section {
+  width: 100%;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  background: var(--card-background, #1A2235);
+  margin-bottom: 40rpx;
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30rpx;
+}
+
+.form-item:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: var(--text-secondary, #94A3B8);
+  margin-bottom: 10rpx;
+}
+
+.form-input {
+  height: 80rpx;
+  background: var(--input-background, #0B1121);
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  color: var(--text-primary, #FFFFFF);
+  font-size: 28rpx;
+}
+
+.picker-view {
+  height: 80rpx;
+  background: var(--input-background, #0B1121);
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-primary, #FFFFFF);
+  font-size: 28rpx;
+}
+
+.arrow-icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-top: auto;
+  padding-bottom: 40rpx;
+}
+
+.save-btn {
+  width: 100%;
+  height: 90rpx;
+  border-radius: 45rpx;
+  color: white;
+  font-size: 32rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cancel-btn {
+  width: 100%;
+  height: 90rpx;
+  border-radius: 45rpx;
+  background: transparent;
+  border: 2rpx solid var(--border-color, #2A3649);
+  color: var(--text-secondary, #94A3B8);
+  font-size: 32rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} 
