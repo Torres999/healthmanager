@@ -1,16 +1,14 @@
 <!--index.wxml-->
 <page-header title="健康管理" bind:heightChange="onHeaderHeightChange"></page-header>
 
-<!-- 顶部欢迎区域 - 直接放在page-header后面，不在scroll-view内，优化版 -->
-<view class="header" style="position: fixed; top: {{headerHeight}}px; left: 30rpx; right: 30rpx; z-index: 100; transform: translateY({{scrollOffset}}px) translateZ(0); will-change: transform; overflow: visible; min-height: 60rpx;">
-  <view class="title" style="margin-bottom: 0;">
-    <text class="text-lg font-bold">早安，{{userInfo.nickName || 'David'}}</text>
-    <text class="text-sm text-secondary mt-20">开启充满活力的一天</text>
-  </view>
-</view>
+
 
 <scroll-view class="scrollarea" scroll-y type="list" bindscroll="onScrollView" enhanced="true" show-scrollbar="false">
   <view class="container" style="padding-top: {{headerHeight - 60}}px;">
+    <view class="title" style="margin-bottom: 0;">
+      <text class="text-lg font-bold">早安，{{userInfo.nickName || 'David'}}</text>
+      <text class="text-sm text-secondary mt-20">开启充满活力的一天</text>
+    </view>
     <!-- 占位元素，为固定定位的header留出空间 -->
     <view style="height: 40rpx;"></view>
     
