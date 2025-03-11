@@ -4,7 +4,7 @@
 
 
 <scroll-view class="scrollarea" scroll-y type="list" bindscroll="onScrollView" enhanced="true" show-scrollbar="false">
-  <view class="container" style="padding-top: {{headerHeight - 60}}px;">
+  <view class="container" style="padding-top: {{headerHeight - 83}}px;">
     <view class="title" style="margin-bottom: 0;">
       <text class="text-lg font-bold">早安，{{userInfo.nickName || 'David'}}</text>
       <text class="text-sm text-secondary mt-20">开启充满活力的一天</text>
