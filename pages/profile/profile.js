@@ -108,6 +108,27 @@ Page({
     }
   },
 
+  // 下拉刷新
+  onPullDownRefresh() {
+    console.log('个人中心页面下拉刷新');
+    
+    // 刷新数据
+    Promise.all([
+      this.loadUserInfo(),
+      this.loadUserStats(),
+      this.loadHealthGoals(),
+      this.loadAchievements(),
+      this.loadHealthProfile()
+    ]).then(() => {
+      // 停止下拉刷新动画
+      wx.stopPullDownRefresh();
+    }).catch(err => {
+      console.error('刷新数据失败:', err);
+      // 停止下拉刷新动画
+      wx.stopPullDownRefresh();
+    });
+  },
+
   loadUserInfo() {
     // 检查用户数据是否存在
     try {

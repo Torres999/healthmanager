@@ -4,5 +4,7 @@
   "usingComponents": {
     "ec-canvas": "../../components/ec-canvas/ec-canvas"
   },
-  "backgroundColor": "#0B1121"
+  "backgroundColor": "#0B1121",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "light"
 } 

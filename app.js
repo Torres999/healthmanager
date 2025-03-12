@@ -1,4 +1,8 @@
 // app.js
+
+// 导入存储工具
+const storage = require('./utils/storage');
+
 App({
   globalData: {
     userInfo: null,
@@ -150,12 +154,84 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
-    // 登录
+    // 检查token是否存在且未过期
+    if (!storage.getToken() || storage.isTokenExpired()) {
+      this.login();
+    }
+  },
+
+  // 登录方法
+  login() {
     wx.login({
       success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        if (res.code) {
+          // 发送 res.code 到后台换取 token
+          wx.request({
+            url: 'http://localhost:8080/hm/auth/login',
+            method: 'POST',
+            data: {
+              code: res.code
+            },
+            success: (result) => {
+              // 输出完整的响应数据，用于调试
+              console.log('登录响应数据:', result);
+              
+              // 检查响应状态码
+              if (result.statusCode === 200) {
+                // 检查响应数据结构
+                if (result.data.token) {
+                  // 标准格式：直接包含token字段
+                  storage.saveToken(result.data.token, result.data.expireIn || 7200);
+                  console.log('登录成功，token已保存');
+                  
+                  // 保存用户ID
+                  if (result.data.userId) {
+                    storage.saveUserId(result.data.userId);
+                    console.log('用户ID已保存:', result.data.userId);
+                  }
+                } else if (result.data.data && result.data.data.token) {
+                  // 嵌套格式：token在data字段内
+                  storage.saveToken(result.data.data.token, result.data.data.expireIn || 7200);
+                  console.log('登录成功，token已保存(嵌套格式)');
+                  
+                  // 保存用户ID
+                  if (result.data.data.userId) {
+                    storage.saveUserId(result.data.data.userId);
+                    console.log('用户ID已保存:', result.data.data.userId);
+                  }
+                } else if (typeof result.data === 'string') {
+                  // 字符串格式：整个响应可能是token字符串
+                  storage.saveToken(result.data, 7200);
+                  console.log('登录成功，token已保存(字符串格式)');
+                } else {
+                  // 无法识别的格式，但状态码是200，尝试继续
+                  console.warn('登录成功但无法识别token格式:', result.data);
+                }
+              } else {
+                console.error('登录失败:', result);
+                wx.showToast({
+                  title: '登录失败，请重试',
+                  icon: 'none'
+                });
+              }
+            },
+            fail: (err) => {
+              console.error('登录请求失败:', err);
+              wx.showToast({
+                title: '网络请求失败，请检查网络',
+                icon: 'none'
+              });
+            }
+          });
+        } else {
+          console.error('登录失败:', res);
+          wx.showToast({
+            title: '微信登录失败，请重试',
+            icon: 'none'
+          });
+        }
       }
-    })
+    });
   },
 
   // 模拟获取健康数据

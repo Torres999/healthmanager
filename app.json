@@ -5,6 +5,7 @@
     "pages/meditation/meditation",
     "pages/analysis/analysis",
     "pages/profile/profile",
+    "pages/login/login",
     "pages/profile/edit/edit",
     "pages/sport/exercise/exercise",
     "pages/sport/records/records",

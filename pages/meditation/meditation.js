@@ -95,6 +95,24 @@ Page({
     }
   },
 
+  // 下拉刷新
+  onPullDownRefresh() {
+    console.log('冥想页面下拉刷新');
+    
+    // 刷新数据
+    Promise.all([
+      this.loadRecentCourses(),
+      this.loadWeeklyProgress()
+    ]).then(() => {
+      // 停止下拉刷新动画
+      wx.stopPullDownRefresh();
+    }).catch(err => {
+      console.error('刷新数据失败:', err);
+      // 停止下拉刷新动画
+      wx.stopPullDownRefresh();
+    });
+  },
+
   // 加载最近课程
   async loadRecentCourses() {
     try {

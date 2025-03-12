@@ -341,23 +341,49 @@ Page({
       // 隐藏加载状态
       wx.hideLoading();
       
-      if (res.code === 0) {
-        // 更新健康数据
+      // 详细记录返回的数据，便于调试
+      console.log('首页处理健康数据:', res);
+      
+      // 处理不同格式的成功响应
+      // 情况1: {code: 0, data: Object} - 原始预期格式
+      // 情况2: {code: 200, message: "操作成功", data: Object} - 实际后端返回格式
+      if (res && res.data && res.code === 0) {
+        // 原始预期格式
         this.setData({
           healthData: res.data.healthData,
-          activityData: res.data.activityChart.values
+          activityData: res.data.activityChart?.values || []
         });
+        
+        console.log('成功加载健康数据:', res.data.healthData);
+        
+        // 如果图表已准备好，重新绘制
+        if (canvasReady) {
+          this.drawActivityChart();
+        }
+      } else if (res && res.data && res.code === 200) {
+        // 实际后端返回格式
+        this.setData({
+          healthData: res.data.healthData,
+          activityData: res.data.activityChart?.values || []
+        });
+        
+        console.log('成功加载健康数据:', res.data.healthData);
         
         // 如果图表已准备好，重新绘制
         if (canvasReady) {
           this.drawActivityChart();
         }
       } else {
+        console.warn('获取健康数据格式异常:', res);
+        
         // 显示错误提示
         wx.showToast({
           title: res.message || '获取数据失败',
           icon: 'none'
         });
+        
+        // 使用默认数据
+        this.useDefaultHealthData();
       }
     }).catch(err => {
       // 隐藏加载状态
@@ -371,33 +397,62 @@ Page({
         icon: 'none'
       });
       
-      // 使用缓存数据或默认数据
-      const healthData = app.globalData.healthData || {};
-      const stepsChange = Math.floor(Math.random() * 15) + 5;
-      
-      this.setData({
-        healthData: {
-          steps: healthData.steps || 6890,
-          stepsChange: stepsChange,
-          heartRate: healthData.heartRate || 72,
-          calories: healthData.calories || 1250,
-          sleep: healthData.sleepHours || 7.5
-        }
-      });
+      // 使用默认数据
+      this.useDefaultHealthData();
+    });
+  },
+  
+  // 使用默认健康数据
+  useDefaultHealthData() {
+    const app = getApp();
+    const healthData = app.globalData.healthData || {};
+    const stepsChange = Math.floor(Math.random() * 15) + 5;
+    
+    this.setData({
+      healthData: {
+        steps: healthData.steps || 6890,
+        stepsChange: stepsChange,
+        heartRate: healthData.heartRate || 72,
+        calories: healthData.calories || 1250,
+        sleep: healthData.sleepHours || 7.5
+      }
     });
   },
 
   // 加载任务数据
   loadTasks() {
+    // 显示加载状态
+    wx.showNavigationBarLoading();
+    
     api.getTodayTasks().then(res => {
-      if (res.code === 0) {
+      // 隐藏加载状态
+      wx.hideNavigationBarLoading();
+      
+      // 详细记录返回的数据，便于调试
+      console.log('获取任务数据返回:', res);
+      
+      // 处理不同格式的成功响应
+      // 情况1: {code: 0, data: Array} - 原始预期格式
+      // 情况2: {code: 200, message: "操作成功", data: Array} - 实际后端返回格式
+      if (res && Array.isArray(res.data) && res.code === 0) {
+        // 原始预期格式
         this.setData({
           tasks: res.data
         });
+      } else if (res && Array.isArray(res.data) && res.code === 200) {
+        // 实际后端返回格式
+        this.setData({
+          tasks: res.data
+        });
+        console.log('成功加载任务数据，共' + res.data.length + '条');
       } else {
-        console.error('获取任务数据失败:', res.message);
+        console.warn('获取任务数据格式异常:', res);
+        // 如果返回的数据格式不正确，保留默认任务数据
       }
     }).catch(err => {
+      // 隐藏加载状态
+      wx.hideNavigationBarLoading();
+      
       console.error('获取任务数据失败:', err);
       // 保留默认任务数据
     });
@@ -566,5 +621,29 @@ Page({
         scrollOffset: offset
       });
     }
+  },
+
+  // 下拉刷新
+  onPullDownRefresh() {
+    console.log('首页下拉刷新');
+    
+    // 刷新数据
+    Promise.all([
+      this.loadUserInfo(),
+      this.loadHealthData(),
+      this.loadTasks()
+    ]).then(() => {
+      // 重新绘制图表
+      if (canvasReady) {
+        this.drawActivityChart();
+      }
+      
+      // 停止下拉刷新动画
+      wx.stopPullDownRefresh();
+    }).catch(err => {
+      console.error('刷新数据失败:', err);
+      // 停止下拉刷新动画
+      wx.stopPullDownRefresh();
+    });
   },
 })

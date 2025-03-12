@@ -193,6 +193,30 @@ Page({
     }
   },
 
+  // 下拉刷新
+  onPullDownRefresh() {
+    console.log('数据分析页面下拉刷新');
+    
+    // 刷新数据
+    this.loadMockData();
+    
+    // 如果图表存在，更新图表数据
+    if (chart) {
+      const mockData = getMockData().exerciseData;
+      chart.setOption({
+        xAxis: {
+          data: mockData.dates
+        },
+        series: [{
+          data: mockData.values
+        }]
+      });
+    }
+    
+    // 停止下拉刷新动画
+    wx.stopPullDownRefresh();
+  },
+
   // 加载模拟数据
   loadMockData() {
     const mockData = getMockData();

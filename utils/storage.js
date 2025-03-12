@@ -8,7 +8,10 @@ const STORAGE_KEYS = {
   EXERCISE_HISTORY: 'exercise_history',
   MEDITATION_HISTORY: 'meditation_history',
   USER_GOALS: 'user_goals',
-  USER_INFO: 'user_info'
+  USER_INFO: 'user_info',
+  TOKEN: 'token',
+  TOKEN_EXPIRE_TIME: 'token_expire_time',
+  USER_ID: 'user_id'
 };
 
 /**
@@ -203,6 +206,92 @@ const getUserInfo = () => {
   }
 };
 
+/**
+ * 保存认证token
+ * @param {string} token 认证token
+ * @param {number} expireIn token过期时间(秒)
+ */
+const saveToken = (token, expireIn = 7200) => {
+  try {
+    wx.setStorageSync(STORAGE_KEYS.TOKEN, token);
+    // 计算过期时间戳 (当前时间 + 过期秒数)
+    const expireTime = Date.now() + expireIn * 1000;
+    wx.setStorageSync(STORAGE_KEYS.TOKEN_EXPIRE_TIME, expireTime);
+    return true;
+  } catch (error) {
+    console.error('保存token失败:', error);
+    return false;
+  }
+};
+
+/**
+ * 获取认证token
+ * @returns {string} 认证token
+ */
+const getToken = () => {
+  try {
+    return wx.getStorageSync(STORAGE_KEYS.TOKEN) || '';
+  } catch (error) {
+    console.error('获取token失败:', error);
+    return '';
+  }
+};
+
+/**
+ * 检查token是否过期
+ * @returns {boolean} 是否过期
+ */
+const isTokenExpired = () => {
+  try {
+    const expireTime = wx.getStorageSync(STORAGE_KEYS.TOKEN_EXPIRE_TIME) || 0;
+    return Date.now() >= expireTime;
+  } catch (error) {
+    console.error('检查token过期失败:', error);
+    return true;
+  }
+};
+
+/**
+ * 清除token
+ */
+const clearToken = () => {
+  try {
+    wx.removeStorageSync(STORAGE_KEYS.TOKEN);
+    wx.removeStorageSync(STORAGE_KEYS.TOKEN_EXPIRE_TIME);
+    return true;
+  } catch (error) {
+    console.error('清除token失败:', error);
+    return false;
+  }
+};
+
+/**
+ * 保存用户ID
+ * @param {string|number} userId 用户ID
+ */
+const saveUserId = (userId) => {
+  try {
+    wx.setStorageSync(STORAGE_KEYS.USER_ID, userId);
+    return true;
+  } catch (error) {
+    console.error('保存用户ID失败:', error);
+    return false;
+  }
+};
+
+/**
+ * 获取用户ID
+ * @returns {string|number} 用户ID
+ */
+const getUserId = () => {
+  try {
+    return wx.getStorageSync(STORAGE_KEYS.USER_ID) || '';
+  } catch (error) {
+    console.error('获取用户ID失败:', error);
+    return '';
+  }
+};
+
 module.exports = {
   saveHealthData,
   getHealthData,
@@ -213,5 +302,11 @@ module.exports = {
   saveUserGoals,
   getUserGoals,
   saveUserInfo,
-  getUserInfo
+  getUserInfo,
+  saveToken,
+  getToken,
+  isTokenExpired,
+  clearToken,
+  saveUserId,
+  getUserId
 }; 

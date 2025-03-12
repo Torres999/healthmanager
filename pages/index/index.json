@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "健康管理",
   "usingComponents": {},
-  "backgroundColor": "#0B1121"
+  "backgroundColor": "#0B1121",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "light"
 }

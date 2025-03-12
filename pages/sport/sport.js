@@ -107,6 +107,24 @@ Page({
     }
   },
 
+  // 下拉刷新
+  onPullDownRefresh() {
+    console.log('运动页面下拉刷新');
+    
+    // 刷新数据
+    Promise.all([
+      this.loadExerciseData(),
+      this.loadExerciseRecords()
+    ]).then(() => {
+      // 停止下拉刷新动画
+      wx.stopPullDownRefresh();
+    }).catch(err => {
+      console.error('刷新数据失败:', err);
+      // 停止下拉刷新动画
+      wx.stopPullDownRefresh();
+    });
+  },
+
   // 加载运动数据
   async loadExerciseData() {
     try {
