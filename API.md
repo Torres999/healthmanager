@@ -24,7 +24,7 @@
 
 获取首页显示的概览数据，包括用户信息、健康数据和活动图表数据。
 
-- **URL**: `/api/home/overview`
+- **URL**: `/hm/home/overview`
 - **方法**: `GET`
 - **参数**: 无
 - **返回示例**:
@@ -57,7 +57,7 @@
 
 获取用户今日需要完成的任务列表。
 
-- **URL**: `/api/home/tasks`
+- **URL**: `/hm/home/tasks`
 - **方法**: `GET`
 - **参数**: 无
 - **返回示例**:
@@ -89,7 +89,7 @@
 
 更新特定任务的完成状态。
 
-- **URL**: `/api/home/tasks/{id}`
+- **URL**: `/hm/home/tasks/{id}`
 - **方法**: `PUT`
 - **参数**: 
   - `id`: 任务ID
@@ -119,7 +119,7 @@
 
 获取用户的活动统计数据，包括运动和冥想的累计时间、次数等。
 
-- **URL**: `/api/home/activity-stats`
+- **URL**: `/hm/home/activity-stats`
 - **方法**: `GET`
 - **参数**: 
   - `period`: (可选) 时间周期，可选值：`week`(默认)、`month`、`year`
@@ -156,7 +156,7 @@
 
 获取用户的运动记录列表。
 
-- **URL**: `/api/exercise/records`
+- **URL**: `/hm/exercise/records`
 - **方法**: `GET`
 - **参数**: 无
 - **返回示例**:
@@ -184,7 +184,7 @@
 
 获取特定运动记录的详细信息。
 
-- **URL**: `/api/exercise/records/{id}`
+- **URL**: `/hm/exercise/records/{id}`
 - **方法**: `GET`
 - **参数**: 
   - `id`: 记录ID
@@ -245,7 +245,7 @@
 
 更新特定运动记录的信息。
 
-- **URL**: `/api/exercise/records/{id}`
+- **URL**: `/hm/exercise/records/{id}`
 - **方法**: `PUT`
 - **参数**: 
   - `id`: 记录ID
@@ -276,7 +276,7 @@
 
 获取用户的健康数据。
 
-- **URL**: `/api/health/data`
+- **URL**: `/hm/health/data`
 - **方法**: `GET`
 - **参数**: 无
 - **返回示例**:
@@ -300,7 +300,7 @@
 
 获取冥想课程列表，可以按分类筛选。
 
-- **URL**: `/api/meditation/courses`
+- **URL**: `/hm/meditation/courses`
 - **方法**: `GET`
 - **参数**: 
   - `categoryId`: (可选) 分类ID
@@ -327,7 +327,7 @@
 
 获取特定冥想课程的详细信息。
 
-- **URL**: `/api/meditation/courses/{id}`
+- **URL**: `/hm/meditation/courses/{id}`
 - **方法**: `GET`
 - **参数**: 
   - `id`: 课程ID
@@ -361,7 +361,7 @@
 
 获取冥想课程的分类列表。
 
-- **URL**: `/api/meditation/categories`
+- **URL**: `/hm/meditation/categories`
 - **方法**: `GET`
 - **参数**: 无
 - **返回示例**:
@@ -373,7 +373,7 @@
     {
       "id": 1,
       "name": "减压放松",
-      "description": "缓解压力，放松身心",
+      "description": "缓解压力，放松身心",s
       "image": "/assets/images/category1.jpg"
     }
   ],
@@ -385,7 +385,7 @@
 
 获取特定冥想分类的详细信息。
 
-- **URL**: `/api/meditation/categories/{id}`
+- **URL**: `/hm/meditation/categories/{id}`
 - **方法**: `GET`
 - **参数**: 
   - `id`: 分类ID

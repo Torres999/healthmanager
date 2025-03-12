@@ -3,10 +3,15 @@
  */
 
 // 基础URL
-const BASE_URL = 'https://api.example.com';
+const BASE_URL = 'http://localhost:8080/hm';
 
 // 请求超时时间
 const TIMEOUT = 10000;
+
+// 获取存储的token
+const getToken = () => {
+  return wx.getStorageSync('token') || '';
+};
 
 /**
  * 发送请求
@@ -23,18 +28,8 @@ const request = (options) => {
       mask: true
     });
     
-    // 检查是否为模拟API请求
-    if (url.startsWith('/api/')) {
-      const mockResponse = handleMockRequest(url, method, data);
-      
-      // 延迟响应，模拟网络请求
-      setTimeout(() => {
-        wx.hideLoading();
-        resolve(mockResponse);
-      }, 500);
-      
-      return;
-    }
+    // 获取认证token
+    const token = getToken();
     
     // 发送请求
     wx.request({
@@ -43,6 +38,7 @@ const request = (options) => {
       data,
       header: {
         'content-type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
         ...header
       },
       timeout: TIMEOUT,

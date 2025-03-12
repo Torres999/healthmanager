@@ -5,6 +5,9 @@ let drawTimer = null;
 let canvasReady = false;
 let chartDrawn = false;
 
+// 导入API服务
+const api = require('../../services/api');
+
 // 直接在文件中实现formatDateLabels函数
 function formatDateLabels(type = 'week') {
   if (type === 'week') {
@@ -80,6 +83,9 @@ Page({
     // 加载健康数据
     this.loadHealthData();
     
+    // 加载任务数据
+    this.loadTasks();
+    
     // 启动心跳动画
     this.startHeartbeat();
   },
@@ -94,6 +100,9 @@ Page({
     
     // 更新健康数据
     this.loadHealthData();
+    
+    // 更新任务数据
+    this.loadTasks();
     
     // 在页面切换回来时重新绘制图表
     setTimeout(() => {
@@ -321,22 +330,76 @@ Page({
 
   // 加载健康数据
   loadHealthData() {
-    const app = getApp();
+    // 显示加载状态
+    wx.showLoading({
+      title: '加载数据中...',
+      mask: true
+    });
     
-    // 获取健康数据
-    const healthData = app.globalData.healthData || {};
-    
-    // 计算步数变化百分比（模拟数据）
-    const stepsChange = Math.floor(Math.random() * 15) + 5;
-    
-    this.setData({
-      healthData: {
-        steps: healthData.steps || 6890,
-        stepsChange: stepsChange,
-        heartRate: healthData.heartRate || 72,
-        calories: healthData.calories || 1250,
-        sleep: healthData.sleepHours || 7.5
+    // 调用API获取首页概览数据
+    api.getHomeOverview().then(res => {
+      // 隐藏加载状态
+      wx.hideLoading();
+      
+      if (res.code === 0) {
+        // 更新健康数据
+        this.setData({
+          healthData: res.data.healthData,
+          activityData: res.data.activityChart.values
+        });
+        
+        // 如果图表已准备好，重新绘制
+        if (canvasReady) {
+          this.drawActivityChart();
+        }
+      } else {
+        // 显示错误提示
+        wx.showToast({
+          title: res.message || '获取数据失败',
+          icon: 'none'
+        });
       }
+    }).catch(err => {
+      // 隐藏加载状态
+      wx.hideLoading();
+      
+      console.error('获取健康数据失败:', err);
+      
+      // 显示错误提示
+      wx.showToast({
+        title: '网络请求失败',
+        icon: 'none'
+      });
+      
+      // 使用缓存数据或默认数据
+      const healthData = app.globalData.healthData || {};
+      const stepsChange = Math.floor(Math.random() * 15) + 5;
+      
+      this.setData({
+        healthData: {
+          steps: healthData.steps || 6890,
+          stepsChange: stepsChange,
+          heartRate: healthData.heartRate || 72,
+          calories: healthData.calories || 1250,
+          sleep: healthData.sleepHours || 7.5
+        }
+      });
+    });
+  },
+
+  // 加载任务数据
+  loadTasks() {
+    api.getTodayTasks().then(res => {
+      if (res.code === 0) {
+        this.setData({
+          tasks: res.data
+        });
+      } else {
+        console.error('获取任务数据失败:', res.message);
+      }
+    }).catch(err => {
+      console.error('获取任务数据失败:', err);
+      // 保留默认任务数据
     });
   },
 
