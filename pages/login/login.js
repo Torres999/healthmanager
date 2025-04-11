@@ -2,6 +2,8 @@
 
 // 导入存储工具
 const storage = require('../../utils/storage');
+// 导入配置管理模块
+const config = require('../../utils/config');
 
 Page({
   data: {
@@ -16,10 +18,54 @@ Page({
         theme: app.globalData.themeData
       });
     }
+    
+    // 检查是否处于演示环境，如果是，自动跳过登录
+    if (config.isDemoMode()) {
+      console.log('演示环境下跳过登录流程');
+      // 设置默认用户ID
+      storage.saveUserId('1');
+      
+      // 延迟跳转，显示友好提示
+      wx.showToast({
+        title: '演示环境下自动登录',
+        icon: 'success',
+        duration: 1500
+      });
+      
+      setTimeout(() => {
+        // 返回上一页或首页
+        const pages = getCurrentPages();
+        if (pages.length > 1) {
+          wx.navigateBack();
+        } else {
+          wx.switchTab({
+            url: '/pages/index/index'
+          });
+        }
+      }, 1500);
+    }
   },
 
   // 获取用户信息并登录
   onGetUserInfo: function (e) {
+    // 如果是演示环境，直接跳过登录
+    if (config.isDemoMode()) {
+      console.log('演示环境下跳过登录流程');
+      // 设置默认用户ID
+      storage.saveUserId('1');
+      
+      // 返回上一页或首页
+      const pages = getCurrentPages();
+      if (pages.length > 1) {
+        wx.navigateBack();
+      } else {
+        wx.switchTab({
+          url: '/pages/index/index'
+        });
+      }
+      return;
+    }
+    
     if (this.data.isLoading) return;
     
     // 检查是否授权

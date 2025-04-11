@@ -230,6 +230,14 @@ const saveToken = (token, expireIn = 7200) => {
  */
 const getToken = () => {
   try {
+    // 注意：这里不能直接导入config模块，会造成循环依赖
+    // 所以通过直接读取storage来判断是否处于演示环境
+    const demoMode = wx.getStorageSync('demo_mode');
+    // 演示环境下，返回一个模拟token
+    if (demoMode !== false) {
+      return 'demo_token_123456789';
+    }
+    
     return wx.getStorageSync(STORAGE_KEYS.TOKEN) || '';
   } catch (error) {
     console.error('获取token失败:', error);
@@ -243,6 +251,14 @@ const getToken = () => {
  */
 const isTokenExpired = () => {
   try {
+    // 注意：这里不能直接导入config模块，会造成循环依赖
+    // 所以通过直接读取storage来判断是否处于演示环境
+    const demoMode = wx.getStorageSync('demo_mode');
+    // 演示环境下，永远返回false（未过期）
+    if (demoMode !== false) {
+      return false;
+    }
+    
     const expireTime = wx.getStorageSync(STORAGE_KEYS.TOKEN_EXPIRE_TIME) || 0;
     return Date.now() >= expireTime;
   } catch (error) {

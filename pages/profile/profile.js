@@ -1,5 +1,9 @@
 const app = getApp();
-import { api } from '../../utils/request';
+// 导入request和storage模块
+const api = require('../../utils/request');
+const storage = require('../../utils/storage');
+// 导入配置管理模块
+const config = require('../../utils/config');
 
 Page({
   data: {
@@ -19,6 +23,7 @@ Page({
       bmi: 21.5,
       bloodType: 'A型'
     },
+    demoMode: true,
     menuItems: [
       {
         icon: '/assets/icons/activity.svg',
@@ -98,6 +103,11 @@ Page({
     this.loadHealthGoals();
     this.loadAchievements();
     this.loadHealthProfile();
+    
+    // 加载演示环境状态
+    this.setData({
+      demoMode: config.isDemoMode()
+    });
   },
 
   onShow() {
@@ -470,5 +480,59 @@ Page({
         scrollOffset: offset
       });
     }
-  }
+  },
+
+  // 切换演示环境状态
+  toggleDemoMode(e) {
+    const isChecked = e.detail.value;
+    
+    // 保存演示环境状态
+    config.setDemoMode(isChecked);
+    
+    // 更新页面数据
+    this.setData({
+      demoMode: isChecked
+    });
+    
+    if (isChecked) {
+      // 如果开启演示环境，默认设置用户ID为1
+      storage.saveUserId('1');
+      wx.showToast({
+        title: '已开启演示环境',
+        icon: 'success',
+        duration: 2000
+      });
+      
+      // 刷新页面显示的数据
+      this.loadUserInfo();
+      this.loadUserStats();
+      this.loadHealthProfile();
+      this.loadHealthGoals();
+      this.loadAchievements();
+    } else {
+      wx.showToast({
+        title: '已关闭演示环境',
+        icon: 'none',
+        duration: 2000
+      });
+      
+      // 提示用户可能需要重新登录
+      setTimeout(() => {
+        wx.showModal({
+          title: '提示',
+          content: '关闭演示环境后，需要重新登录后才能正常使用应用',
+          showCancel: true,
+          cancelText: '暂不登录',
+          confirmText: '去登录',
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: '/pages/login/login'
+              });
+            }
+          }
+        });
+      }, 1000);
+    }
+  },
 }); 

@@ -2,6 +2,8 @@
 
 // 导入存储工具
 const storage = require('./utils/storage');
+// 导入配置管理模块
+const config = require('./utils/config');
 
 App({
   globalData: {
@@ -126,6 +128,17 @@ App({
       global.__route__ = '';
     }
     
+    // 初始化应用配置 - 需要在最前面执行，确保演示环境设置生效
+    config.initConfig();
+    console.log('当前演示环境状态:', config.isDemoMode() ? '开启' : '关闭');
+    
+    // 如果处于演示环境，设置模拟token和用户ID
+    if (config.isDemoMode()) {
+      storage.saveUserId('1');
+      storage.saveToken('demo_token_123456789', 86400); // 24小时过期
+      console.log('演示环境已设置默认用户ID和Token');
+    }
+    
     // 设置主题颜色
     wx.setStorageSync('theme', 'dark');
     this.updateTheme();
@@ -154,8 +167,8 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
-    // 检查token是否存在且未过期
-    if (!storage.getToken() || storage.isTokenExpired()) {
+    // 只在非演示环境下检查登录状态
+    if (!config.isDemoMode() && (!storage.getToken() || storage.isTokenExpired())) {
       this.login();
     }
   },

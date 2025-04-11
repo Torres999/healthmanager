@@ -4,6 +4,8 @@
 
 // 导入存储工具
 const storage = require('./storage');
+// 导入配置模块
+const config = require('./config');
 
 // 基础URL
 const BASE_URL = 'http://localhost:8080';
@@ -13,6 +15,11 @@ const TIMEOUT = 10000;
 
 // 获取存储的token
 const getToken = () => {
+  // 如果是演示环境，直接返回模拟token
+  if (config.isDemoMode()) {
+    return 'demo_token_123456789';
+  }
+  
   // 检查token是否过期
   if (storage.isTokenExpired()) {
     console.log('Token已过期，需要重新登录');
@@ -42,6 +49,92 @@ const request = (options) => {
       mask: true
     });
     
+    // 检查是否处于演示环境
+    if (config.isDemoMode()) {
+      // 演示环境下，返回模拟数据
+      wx.hideLoading();
+      console.log('演示环境，使用模拟数据:', url);
+      
+      // 设置默认用户ID
+      storage.saveUserId('1');
+      
+      // 返回模拟数据
+      try {
+        const mockData = handleMockRequest(url, method, data);
+        if (mockData && mockData.code === 0) {
+          setTimeout(() => {
+            resolve(mockData);
+          }, 300); // 添加300ms延迟，模拟网络请求
+          return;
+        }
+      } catch (err) {
+        console.error('生成模拟数据失败:', err);
+      }
+      
+      // 根据URL返回不同的模拟数据
+      if (url.includes('/hm/home/tasks')) {
+        // 对于任务列表接口，返回模拟数据
+        setTimeout(() => {
+          resolve({
+            code: 0,
+            data: [
+              {
+                id: 1,
+                title: '晨间跑步',
+                description: '30分钟有氧运动',
+                completed: false,
+                type: 'exercise'
+              },
+              {
+                id: 2,
+                title: '冥想放松',
+                description: '15分钟正念冥想',
+                completed: false,
+                type: 'meditation'
+              }
+            ],
+            message: 'success (mock data from request)'
+          });
+        }, 300);
+        return;
+      }
+      
+      // 对于首页概览接口，返回模拟数据
+      if (url.includes('/hm/home/overview')) {
+        setTimeout(() => {
+          resolve({
+            code: 0,
+            data: {
+              healthData: {
+                steps: 6890,
+                stepsChange: 12,
+                heartRate: 72,
+                calories: 1250,
+                sleep: 7.5
+              },
+              activityChart: {
+                dates: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+                values: [30, 40, 35, 50, 45, 60, 70]
+              }
+            },
+            message: 'success (mock data from request)'
+          });
+        }, 300);
+        return;
+      }
+      
+      // 对于其他请求，返回通用成功响应
+      setTimeout(() => {
+        resolve({
+          code: 0,
+          data: {},
+          message: 'success (demo mode)'
+        });
+      }, 300);
+      return;
+    }
+    
+    // 非演示环境，正常发送请求
     // 获取认证token
     const token = getToken();
     
@@ -87,18 +180,42 @@ const request = (options) => {
         } else if (res.statusCode === 401) {
           // 处理未授权错误
           console.log('未授权，需要重新登录');
-          // 清除token
+          // 清除过期token
           storage.clearToken();
-          // 跳转到登录页
-          wx.navigateTo({
-            url: '/pages/login/login'
-          });
           
-          // 显示错误提示
-          wx.showToast({
-            title: '登录已过期，请重新登录',
-            icon: 'none'
-          });
+          // 检查是否是演示环境
+          if (!config.isDemoMode()) {
+            // 非演示环境才跳转登录页
+            // 跳转到登录页
+            wx.navigateTo({
+              url: '/pages/login/login'
+            });
+            
+            // 显示错误提示
+            wx.showToast({
+              title: '登录已过期，请重新登录',
+              icon: 'none'
+            });
+          } else {
+            // 演示环境下，设置模拟token和用户ID
+            storage.saveUserId('1');
+            storage.saveToken('demo_token_123456789', 86400); // 24小时过期
+            console.log('演示环境下自动续签token');
+            
+            // 显示提示
+            wx.showToast({
+              title: '演示环境下自动登录',
+              icon: 'success'
+            });
+            
+            // 返回模拟成功响应
+            resolve({
+              code: 0,
+              data: {},
+              message: 'success (auto login in demo mode)'
+            });
+            return;
+          }
           
           reject(new Error('未授权，需要重新登录'));
         } else {
@@ -189,160 +306,188 @@ const request = (options) => {
  * @returns {Object} 模拟响应
  */
 const handleMockRequest = (url, method, data) => {
-  // 运动记录列表
-  if (url === '/api/exercise/records' && method === 'GET') {
-    return {
-      code: 0,
-      data: generateMockExerciseRecords(),
-      message: 'success'
-    };
-  }
+  console.log('处理模拟请求:', url, method);
   
-  // 运动记录详情
-  if (url.match(/\/api\/exercise\/records\/\d+/) && method === 'GET') {
-    const id = url.split('/').pop();
-    return {
-      code: 0,
-      data: generateMockExerciseDetail(id),
-      message: 'success'
-    };
-  }
-  
-  // 健康数据
-  if (url === '/api/health/data' && method === 'GET') {
+  // 首页概览
+  if (url.includes('/hm/home/overview') && method === 'GET') {
     return {
       code: 0,
       data: {
-        steps: Math.floor(Math.random() * 10000),
-        heartRate: Math.floor(Math.random() * 40) + 60,
-        sleepHours: Math.floor(Math.random() * 4) + 5,
-        calories: Math.floor(Math.random() * 500) + 1000
+        userInfo: {
+          nickName: 'David',
+          avatarUrl: '/assets/images/avatar.png'
+        },
+        healthData: {
+          steps: 6890,
+          stepsChange: 12,
+          heartRate: 72,
+          calories: 1250,
+          sleep: 7.5
+        },
+        activityChart: {
+          dates: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+          values: [30, 40, 35, 50, 45, 60, 70]
+        }
       },
-      message: 'success'
+      message: 'success (mock data)'
     };
   }
   
-  // 冥想课程
-  if (url === '/api/meditation/courses' && method === 'GET') {
-    const categoryId = data?.categoryId;
-    const courses = [
-      {
-        id: 1,
-        title: '晨间冥想',
-        description: '开启美好一天',
-        duration: 15,
-        image: '/assets/images/meditation1.jpg',
-        categoryId: 1
-      },
-      {
-        id: 2,
-        title: '专注力训练',
-        description: '提升工作效率',
-        duration: 20,
-        image: '/assets/images/meditation2.jpg',
-        categoryId: 2
-      },
-      {
-        id: 3,
-        title: '睡前放松',
-        description: '改善睡眠质量',
-        duration: 30,
-        image: '/assets/images/meditation3.jpg',
-        categoryId: 3
-      },
-      {
-        id: 4,
-        title: '减压冥想',
-        description: '缓解压力和焦虑',
-        duration: 25,
-        image: '/assets/images/meditation4.jpg',
-        categoryId: 1
-      },
-      {
-        id: 5,
-        title: '正念呼吸',
-        description: '培养专注和平静',
-        duration: 10,
-        image: '/assets/images/meditation5.jpg',
-        categoryId: 2
-      }
-    ];
-    
-    // 如果指定了分类ID，则过滤课程
-    const filteredCourses = categoryId ? courses.filter(course => course.categoryId === parseInt(categoryId)) : courses;
-    
-    return {
-      code: 0,
-      data: filteredCourses,
-      message: 'success'
-    };
-  }
-  
-  // 冥想分类
-  if (url === '/api/meditation/categories' && method === 'GET') {
+  // 获取今日任务
+  if (url.includes('/hm/home/tasks') && method === 'GET' && !url.includes('/hm/home/tasks/')) {
     return {
       code: 0,
       data: [
         {
           id: 1,
-          name: '减压放松',
-          description: '缓解压力，放松身心',
-          image: '/assets/images/category1.jpg'
+          title: '晨间跑步',
+          description: '30分钟有氧运动',
+          completed: false,
+          type: 'exercise'
         },
         {
           id: 2,
-          name: '专注力提升',
-          description: '提高注意力和工作效率',
-          image: '/assets/images/category2.jpg'
+          title: '冥想放松',
+          description: '15分钟正念冥想',
+          completed: false,
+          type: 'meditation'
         },
         {
           id: 3,
-          name: '睡眠改善',
-          description: '帮助入睡，提高睡眠质量',
-          image: '/assets/images/category3.jpg'
+          title: '健康饮食',
+          description: '记录今日饮食',
+          completed: false,
+          type: 'diet'
         }
       ],
-      message: 'success'
+      message: 'success (mock data)'
     };
   }
   
-  // 冥想分类详情
-  if (url.match(/\/api\/meditation\/categories\/\d+/) && method === 'GET') {
-    const id = parseInt(url.split('/').pop());
-    const categories = {
-      1: {
-        id: 1,
-        name: '减压放松',
-        description: '缓解压力，放松身心',
-        image: '/assets/images/category1.jpg'
-      },
-      2: {
-        id: 2,
-        name: '专注力提升',
-        description: '提高注意力和工作效率',
-        image: '/assets/images/category2.jpg'
-      },
-      3: {
-        id: 3,
-        name: '睡眠改善',
-        description: '帮助入睡，提高睡眠质量',
-        image: '/assets/images/category3.jpg'
-      }
-    };
-    
+  // 更新任务状态
+  if (url.includes('/hm/home/tasks/') && method === 'PUT') {
+    const taskId = parseInt(url.split('/').pop());
     return {
       code: 0,
-      data: categories[id] || {},
-      message: 'success'
+      data: {
+        id: taskId,
+        title: '任务' + taskId,
+        description: '任务描述',
+        completed: data.completed || false,
+        type: 'exercise'
+      },
+      message: 'success (mock data)'
+    };
+  }
+  
+  // 获取单个任务
+  if (url.includes('/hm/home/tasks/') && method === 'GET') {
+    const taskId = parseInt(url.split('/').pop());
+    return {
+      code: 0,
+      data: {
+        id: taskId,
+        title: '任务' + taskId,
+        description: '任务描述',
+        completed: false,
+        type: 'exercise'
+      },
+      message: 'success (mock data)'
+    };
+  }
+  
+  // 运动记录列表
+  if (url.includes('/hm/exercise/records') && method === 'GET' && !url.includes('/records/')) {
+    return {
+      code: 0,
+      data: generateMockExerciseRecords(),
+      message: 'success (mock data)'
+    };
+  }
+  
+  // 运动记录详情
+  if (url.includes('/hm/exercise/records/') && method === 'GET') {
+    const recordId = url.split('/').pop();
+    return {
+      code: 0,
+      data: generateMockExerciseDetail(recordId),
+      message: 'success (mock data)'
+    };
+  }
+  
+  // 健康数据
+  if (url.includes('/hm/health/data') && method === 'GET') {
+    return {
+      code: 0,
+      data: {
+        steps: 8547,
+        heartRate: 72,
+        sleepHours: 7.5,
+        calories: 1250
+      },
+      message: 'success (mock data)'
+    };
+  }
+  
+  // 活动统计数据
+  if (url.includes('/hm/home/activity-stats') && method === 'GET') {
+    return {
+      code: 0,
+      data: {
+        exercise: {
+          totalSessions: 12,
+          totalMinutes: 360,
+          totalCalories: 2450,
+          totalDistance: 24.5
+        },
+        meditation: {
+          totalSessions: 8,
+          totalMinutes: 120,
+          streak: 5
+        },
+        steps: {
+          total: 48250,
+          dailyAverage: 6893,
+          bestDay: "周三"
+        }
+      },
+      message: 'success (mock data)'
+    };
+  }
+  
+  // 冥想课程列表
+  if (url.includes('/hm/meditation/courses') && method === 'GET' && !url.includes('/courses/')) {
+    return {
+      code: 0,
+      data: [
+        {
+          id: 1,
+          title: '晨间冥想',
+          description: '开启美好一天',
+          duration: 15,
+          image: '/assets/images/meditation1.jpg',
+          categoryId: 1
+        },
+        {
+          id: 2,
+          title: '睡前放松',
+          description: '帮助入睡',
+          duration: 20,
+          image: '/assets/images/meditation2.jpg',
+          categoryId: 2
+        }
+      ],
+      message: 'success (mock data)'
     };
   }
   
   // 冥想课程详情
-  if (url.match(/\/api\/meditation\/courses\/\d+/) && method === 'GET') {
-    const id = parseInt(url.split('/').pop());
-    const courses = {
-      1: {
-        id: 1,
+  if (url.includes('/hm/meditation/courses/') && method === 'GET') {
+    const courseId = parseInt(url.split('/').pop());
+    return {
+      code: 0,
+      data: {
+        id: courseId,
         title: '晨间冥想',
         description: '开启美好一天的正念冥想，帮助你以平静的心态迎接新的一天。通过专注呼吸和身体扫描，唤醒身心，增强能量。',
         duration: 15,
@@ -358,88 +503,16 @@ const handleMockRequest = (url, method, data) => {
           '慢慢睁开眼睛，带着平静和专注开始新的一天'
         ]
       },
-      2: {
-        id: 2,
-        title: '专注力训练',
-        description: '提升工作效率的专注力训练，帮助你在繁忙的工作中保持清晰的思维。通过引导式冥想，增强注意力和集中力。',
-        duration: 20,
-        image: '/assets/images/meditation2.jpg',
-        categoryId: 2,
-        audioUrl: '/assets/audio/meditation2.mp3',
-        steps: [
-          '选择一个不受打扰的环境，可以坐在椅子上',
-          '保持脊柱挺直，双手放在膝盖上',
-          '闭上眼睛，将注意力集中在一个点上',
-          '当注意力分散时，温和地将其拉回',
-          '练习单点专注5分钟',
-          '逐渐延长专注时间'
-        ]
-      },
-      3: {
-        id: 3,
-        title: '睡前放松',
-        description: '改善睡眠质量的放松冥想，帮助你摆脱白天的压力和焦虑，为深度睡眠做好准备。包含渐进式肌肉放松和引导式想象。',
-        duration: 30,
-        image: '/assets/images/meditation3.jpg',
-        categoryId: 3,
-        audioUrl: '/assets/audio/meditation3.mp3',
-        steps: [
-          '躺在床上，找到舒适的姿势',
-          '从脚趾开始，逐渐放松全身肌肉',
-          '注意呼吸，让它变得缓慢而深沉',
-          '想象自己在一个安全、平静的地方',
-          '让思绪自然流动，不要刻意控制',
-          '随着引导慢慢进入睡眠状态'
-        ]
-      },
-      4: {
-        id: 4,
-        title: '减压冥想',
-        description: '缓解压力和焦虑的冥想练习，帮助你在紧张的生活中找到内心的平静。通过呼吸技巧和身体扫描，释放紧张和不适。',
-        duration: 25,
-        image: '/assets/images/meditation4.jpg',
-        categoryId: 1,
-        audioUrl: '/assets/audio/meditation4.mp3',
-        steps: [
-          '找一个安静的地方坐下',
-          '闭上眼睛，深呼吸几次',
-          '识别身体中紧张的区域',
-          '将呼吸引导到这些区域，想象紧张随呼吸释放',
-          '练习4-7-8呼吸法：吸气4秒，屏息7秒，呼气8秒',
-          '重复这个过程，直到感到放松'
-        ]
-      },
-      5: {
-        id: 5,
-        title: '正念呼吸',
-        description: '培养专注和平静的基础冥想练习，适合冥想初学者。通过简单的呼吸观察，培养当下的觉知和接纳。',
-        duration: 10,
-        image: '/assets/images/meditation5.jpg',
-        categoryId: 2,
-        audioUrl: '/assets/audio/meditation5.mp3',
-        steps: [
-          '采取舒适的坐姿，保持背部挺直',
-          '将注意力集中在呼吸上',
-          '观察呼吸的自然节奏，不要刻意控制',
-          '当思绪wandering时，温和地将注意力带回呼吸',
-          '保持这种觉知状态10分钟',
-          '结束时，先注意身体感觉，再慢慢睁开眼睛'
-        ]
-      }
-    };
-    
-    return {
-      code: 0,
-      data: courses[id] || {},
-      message: 'success'
+      message: 'success (mock data)'
     };
   }
   
-  // 默认返回空数据
+  // 通用默认响应
+  console.log('没有匹配的模拟数据处理:', url, method);
   return {
     code: 0,
-    data: null,
-    message: 'no data'
+    data: {},
+    message: `success (default mock data for ${url})`
   };
 };
 
@@ -568,6 +641,35 @@ const generateMockExerciseDetail = (id) => {
  * @returns {Promise} 请求结果
  */
 const get = (url, data = {}, header = {}) => {
+  // 检查是否在演示环境下
+  if (config.isDemoMode()) {
+    console.log('演示环境，GET请求直接返回模拟数据:', url);
+    return new Promise((resolve) => {
+      // 尝试获取模拟数据
+      try {
+        const mockData = handleMockRequest(url, 'GET', data);
+        if (mockData) {
+          setTimeout(() => {
+            resolve(mockData);
+          }, 300);
+          return;
+        }
+      } catch (err) {
+        console.error('生成模拟数据失败:', err);
+      }
+      
+      // 如果没有特定的模拟数据处理，返回通用的成功响应
+      setTimeout(() => {
+        resolve({
+          code: 0,
+          data: {},
+          message: 'success (demo mode)'
+        });
+      }, 300);
+    });
+  }
+  
+  // 正常环境下发送请求
   return request({
     url,
     method: 'GET',
@@ -584,6 +686,35 @@ const get = (url, data = {}, header = {}) => {
  * @returns {Promise} 请求结果
  */
 const post = (url, data = {}, header = {}) => {
+  // 检查是否在演示环境下
+  if (config.isDemoMode()) {
+    console.log('演示环境，POST请求直接返回模拟数据:', url);
+    return new Promise((resolve) => {
+      // 尝试获取模拟数据
+      try {
+        const mockData = handleMockRequest(url, 'POST', data);
+        if (mockData) {
+          setTimeout(() => {
+            resolve(mockData);
+          }, 300);
+          return;
+        }
+      } catch (err) {
+        console.error('生成模拟数据失败:', err);
+      }
+      
+      // 如果没有特定的模拟数据处理，返回通用的成功响应
+      setTimeout(() => {
+        resolve({
+          code: 0,
+          data: {},
+          message: 'success (demo mode)'
+        });
+      }, 300);
+    });
+  }
+  
+  // 正常环境下发送请求
   return request({
     url,
     method: 'POST',
@@ -600,6 +731,35 @@ const post = (url, data = {}, header = {}) => {
  * @returns {Promise} 请求结果
  */
 const put = (url, data = {}, header = {}) => {
+  // 检查是否在演示环境下
+  if (config.isDemoMode()) {
+    console.log('演示环境，PUT请求直接返回模拟数据:', url);
+    return new Promise((resolve) => {
+      // 尝试获取模拟数据
+      try {
+        const mockData = handleMockRequest(url, 'PUT', data);
+        if (mockData) {
+          setTimeout(() => {
+            resolve(mockData);
+          }, 300);
+          return;
+        }
+      } catch (err) {
+        console.error('生成模拟数据失败:', err);
+      }
+      
+      // 如果没有特定的模拟数据处理，返回通用的成功响应
+      setTimeout(() => {
+        resolve({
+          code: 0,
+          data: {},
+          message: 'success (demo mode)'
+        });
+      }, 300);
+    });
+  }
+  
+  // 正常环境下发送请求
   return request({
     url,
     method: 'PUT',
@@ -616,6 +776,35 @@ const put = (url, data = {}, header = {}) => {
  * @returns {Promise} 请求结果
  */
 const del = (url, data = {}, header = {}) => {
+  // 检查是否在演示环境下
+  if (config.isDemoMode()) {
+    console.log('演示环境，DELETE请求直接返回模拟数据:', url);
+    return new Promise((resolve) => {
+      // 尝试获取模拟数据
+      try {
+        const mockData = handleMockRequest(url, 'DELETE', data);
+        if (mockData) {
+          setTimeout(() => {
+            resolve(mockData);
+          }, 300);
+          return;
+        }
+      } catch (err) {
+        console.error('生成模拟数据失败:', err);
+      }
+      
+      // 如果没有特定的模拟数据处理，返回通用的成功响应
+      setTimeout(() => {
+        resolve({
+          code: 0,
+          data: {},
+          message: 'success (demo mode)'
+        });
+      }, 300);
+    });
+  }
+  
+  // 正常环境下发送请求
   return request({
     url,
     method: 'DELETE',
@@ -624,9 +813,17 @@ const del = (url, data = {}, header = {}) => {
   });
 };
 
+// 导出API方法
 module.exports = {
   get,
   post,
   put,
-  delete: del
+  delete: del,
+  // 为服务层使用导出api对象
+  api: {
+    get,
+    post,
+    put,
+    delete: del
+  }
 }; 

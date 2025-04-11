@@ -109,6 +109,14 @@
 
     <!-- 设置菜单 -->
     <view class="settings-menu card card-hover">
+      <!-- 演示环境开关 -->
+      <view class="menu-item">
+        <view class="menu-icon gradient-bg">
+          <icon type="{{demoMode ? 'check' : 'off'}}" size="20" color="#FFFFFF" />
+        </view>
+        <text class="menu-title">演示环境</text>
+        <switch checked="{{demoMode}}" bindchange="toggleDemoMode" color="#4F6EF6" />
+      </view>
       <view class="menu-item" wx:for="{{menuItems}}" wx:key="id" bindtap="navigateToMenu" data-url="{{item.url}}">
         <view class="menu-icon gradient-bg">
           <icon type="{{item.iconType}}" size="20" color="#FFFFFF" />

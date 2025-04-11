@@ -3,8 +3,9 @@
  * 封装所有与后端API交互的方法
  */
 
-// 导入请求工具
-const { get, post, put } = require('../utils/request');
+// 导入请求工具和配置模块
+const request = require('../utils/request');
+const config = require('../utils/config');
 
 /**
  * 获取首页概览数据
@@ -13,7 +14,8 @@ const { get, post, put } = require('../utils/request');
  */
 const getHomeOverview = () => {
   console.log('正在请求首页概览数据...');
-  return get('/hm/home/overview')
+  // 使用request的get方法，它会自动处理演示环境
+  return request.get('/hm/home/overview')
     .then(res => {
       // 记录返回的数据，便于调试
       console.log('获取首页概览数据返回:', res);
@@ -60,7 +62,7 @@ const getHomeOverview = () => {
  */
 const getTodayTasks = () => {
   // 尝试从后端获取数据，如果失败则返回模拟数据
-  return get('/hm/home/tasks')
+  return request.get('/hm/home/tasks')
     .then(res => {
       // 处理后端返回的数据格式
       // 如果是 {code: 200, message: "操作成功", data: Array} 格式，直接返回
@@ -120,7 +122,7 @@ const getTodayTasks = () => {
  * @returns {Promise} 请求结果
  */
 const updateTaskStatus = (id, completed) => {
-  return put(`/hm/home/tasks/${id}`, { completed });
+  return request.put(`/hm/home/tasks/${id}`, { completed });
 };
 
 // 导出API方法
